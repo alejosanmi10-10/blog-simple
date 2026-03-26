@@ -4,7 +4,7 @@
 
 <template>
   <header>
-    <img src="../../../public/logoblanco.png">
+    <img src="../../../public/logo_cn.svg" style="width: 100px; margin-right: 1rem;">
     <div class="contenedor_iconos">
       <svg xmlns="http://www.w3.org/2000/svg" width="2em" class="iconos" height="2em" viewBox="0 0 20 20">
         <path fill="currentColor"
@@ -23,9 +23,9 @@
   </header>
   <div class="contenedor">
     <div class="informacion">
-      <p class="info">¡Que esperas para conocernos!</p>
-      <h1>Cada día es una página en blanco esperando ser escrita.</h1>
-      <p class="info2">tu opinion es importante para nosotros. Comienza ahora</p>
+      <p class="info" style="color: black; font-weight: 900; font-size: 2.5rem; text-shadow: 2px 2px 0px white;">¡BIENVENIDOS AL C.N.!</p>
+      <h1 style="color: #ff00ff; text-shadow: 4px 4px 0px black; -webkit-text-stroke: 2px black;">Tus shows favoritos te esperan.</h1>
+      <p class="info2" style="color: black; font-weight: bold; background: white; padding: 10px; border: 4px solid black; display: inline-block;">Únete a nuestra aventura web. Comienza ahora</p>
 
       <button class="boton registro"> <router-link class="link" to="/registro">Registrate</router-link></button>
       <button class="boton login"><router-link class="link" to="/inicio">Iniciar Sesion</router-link></button>

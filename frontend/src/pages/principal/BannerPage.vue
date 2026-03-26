@@ -1,47 +1,75 @@
 <template>
-    <div class="contain-banner">
+  <div class="contain-banner">
+    <div class="caja-cn">
+      <h1>¡BIENVENIDOS AL C.N.!</h1>
+      <p>Entra a hablar de tus episodios y personajes de caricaturas favoritos.</p>
+      <router-link to="/dashboard/principal" class="boton-empezar">¡ENTRAR AL BLOG!</router-link>
     </div>
+  </div>
 </template>
+
 <script setup>
 </script>
-<style>
-.h1-info {
-    font-size: 3rem;
-}
 
-.p-info {
-    font-size: 1.2rem;
-}
-
+<style scoped>
 .contain-banner {
-
     width: 100%;
     height: 90vh;
-    animation-name: changeBackground;
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-    background-size: 100% 100%;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-@keyframes changeBackground {
-    0% {
-        background-image: url('../../public/1.png');
-    }
+.caja-cn {
+    background: #ff00ff; /* Magenta */
+    padding: 3rem;
+    color: black;
+    text-align: center;
+    border: 6px solid black;
+    box-shadow: 15px 15px 0px black;
+    transform: rotate(-2deg);
+    transition: transform 0.2s ease;
+}
 
-    33% {
-        background-image: url('../../public/2.png');
-    }
+.caja-cn:hover {
+    transform: rotate(0deg);
+}
 
-    66% {
-        background-image: url('../../public/1.png');
-    }
+.caja-cn h1 {
+    font-size: 4rem;
+    color: #ffff00;
+    -webkit-text-stroke: 2px black;
+    text-shadow: 4px 4px 0px black;
+    margin-bottom: 1rem;
+    font-family: "League Spartan", sans-serif;
+    text-transform: uppercase;
+}
 
-    100% {
-        background-image: url('../../public/3.png');
-    }
+.caja-cn p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 2rem;
+}
+
+.boton-empezar {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background-color: #00ffff;
+    color: black;
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-decoration: none;
+    border: 4px solid black;
+    box-shadow: 8px 8px 0px black;
+    text-transform: uppercase;
+    font-family: 'League Spartan', sans-serif;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.boton-empezar:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px black;
+    background-color: #ffff00;
 }
 </style>

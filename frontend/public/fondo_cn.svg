@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+  <!-- Memphis design style fun elements -->
+  <!-- Magenta Circle -->
+  <circle cx="50" cy="50" r="30" fill="#E8388B" />
+  
+  <!-- Yellow Square -->
+  <rect x="180" y="30" width="50" height="50" fill="#FFF100" transform="rotate(15, 205, 55)" />
+  
+  <!-- Blue Triangle -->
+  <polygon points="60,220 100,280 20,280" fill="#00A2E8" />
+  
+  <!-- Wavy line -->
+  <path d="M180 220 Q 210 180 240 220 T 300 220" stroke="#000" stroke-width="12" fill="none" stroke-linecap="round" />
+  
+  <!-- Black polka dots scattered -->
+  <circle cx="150" cy="150" r="8" fill="#000" />
+  <circle cx="280" cy="100" r="10" fill="#000" />
+  <circle cx="90" cy="120" r="5" fill="#000" />
+  <circle cx="30" cy="180" r="7" fill="#000" />
+  <circle cx="230" cy="270" r="9" fill="#000" />
+  
+  <!-- Little plus signs -->
+  <path d="M120 40 L120 60 M110 50 L130 50" stroke="#000" stroke-width="6" stroke-linecap="round" />
+  <path d="M250 140 L250 160 M240 150 L260 150" stroke="#000" stroke-width="6" stroke-linecap="round" />
+</svg>

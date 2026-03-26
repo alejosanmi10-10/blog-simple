@@ -1,8 +1,8 @@
 <template>
   <div class="contenedor_crear">
     <div class="decoracion">
-      <h1>¡Deja volar tu imaginacion!</h1>
-      <h3>Tu opinion es importante</h3>
+      <h1>¡Crea tu propia historia mágica!</h1>
+      <h3>Comparte sobre tu personaje favorito</h3>
     </div>
 
     <form class="info_crear" @submit.prevent="crearPublicacion">
@@ -107,9 +107,9 @@ const crearPublicacion = async () => {
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
-  background-color: #222;
+  background-color: rgba(26, 15, 60, 0.9);
   border-radius: 1rem;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 5px 15px rgba(200, 150, 255, 0.4);
   color: white;
 }
 
@@ -138,8 +138,8 @@ hr {
 .textarea {
   padding: 0.8rem;
   border-radius: 0.5rem;
-  border: 1px solid #444;
-  background-color: #333;
+  border: 1px solid rgba(200, 150, 255, 0.4);
+  background-color: #1a0f3c;
   color: #f0e3ca;
   font-size: 1rem;
   transition: border-color 0.3s;

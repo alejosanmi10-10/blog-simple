@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link to="/dashboard/banner">
-      <img src="../../public/logoblanco.png" width="45%" />
+      <img src="../../public/logo_cn.svg" width="10%" />
 
     </router-link>
     <div class="contenido">
@@ -83,7 +83,8 @@ export default {
 
 <style>
 .header {
-  background-color: black;
+  background-color: #ffff00;
+  border-bottom: 6px solid #000;
   width: 100%;
   padding: 0.5rem 3rem;
   display: flex;

@@ -120,11 +120,14 @@ export default {
 <style>
 .vistas {
   display: grid;
-  grid-template-columns: 20% 80%;
+  grid-template-columns: 25% 75%;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .contenedor {
-  border-radius: 1rem;
   margin-top: 20px;
 }
 
@@ -132,26 +135,30 @@ export default {
   text-align: center;
   padding-top: 10px;
   color: white;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 2.5rem;
+  -webkit-text-stroke: 2px black;
+  text-shadow: 4px 4px 0px black;
 }
 
 .separator {
   border: none;
-  height: 2px;
-  background-color: #ffffff;
-  width: 80%;
-  margin: 20px auto;
+  border-bottom: 4px solid black;
+  width: 100%;
+  margin: 10px auto 20px;
 }
 
 .listaUsuarios {
-
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  background: white;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px black;
   padding: 1rem;
-  height: 25vh;
+  height: 30vh;
   overflow-y: auto;
   gap: 1rem;
-  margin: 0 auto;
+  margin-bottom: 2rem;
 }
 
 .listaUsuarios::-webkit-scrollbar {
@@ -161,47 +168,42 @@ export default {
 .busqueda {
   display: flex;
   gap: 1rem;
-  color: white;
+  color: black;
   align-items: center;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 .campo_busqueda {
-  width: 40%;
-  height: 1.5rem;
-  border-radius: 2rem;
-  border: 1px solid #ccc;
-  /* Borde normal */
-  padding: 0.5rem;
-
+  width: 60%;
+  height: 3rem;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px black;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 0;
   outline: none;
-}
-
-.campo_busqueda:hover {
-  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .campo_busqueda:focus {
-  border-color: #2d7dd7;
-  border-width: 2px;
-  border-style: solid;
-  box-shadow: 0 0 5px rgba(149, 26, 10, 0.5);
+  background-color: #ffff00;
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px black;
 }
 
 .listaPublicaciones {
-
-  width: 80%;
+  width: 100%;
   gap: 1rem;
   display: flex;
   flex-direction: column;
   height: 75vh;
   overflow-y: auto;
   align-items: center;
-  padding: 1rem 8rem;
-
+  padding: 0 2rem;
 }
 
 .listaPublicaciones::-webkit-scrollbar {

@@ -1,7 +1,7 @@
 <template>
   <div class="c_registro">
     <div class="logo">
-      <router-link to="/"><img src="../../../public/logoblanco.png" alt="Logo" class="imagen"></router-link>
+      <router-link to="/"><img src="../../../public/logo_cn.svg" alt="Logo" class="imagen" style="width: 25rem; max-width: 90vw;"></router-link>
     </div>
     <div class="contenedor_login">
       <form class="formulario" @submit.prevent="iniciarSesion">

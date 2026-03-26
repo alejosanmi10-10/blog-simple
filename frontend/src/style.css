@@ -7,18 +7,11 @@ html, body, #app {
 }
 
 html {
-  background-image: url(../public/fondo.png);
-  /* background-image: repeating-linear-gradient(
-    -45deg,
-    #3498db,
-    #3498db 20px,
-    #f1c40f 20px,
-    #f1c40f 40px
-  ); */
-    /* background-image: url(../public/1.webp); */
-  background-size: cover;          /* Escala la imagen para cubrir todo el fondo */
-  background-position: center;  
-  background-repeat: no-repeat;
+  background-color: #00ffff; /* Bright Cyan Base */
+  background-image: url('../public/fondo_cn_personajes.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }
 h1,button{
   font-family: "League Spartan", sans-serif;
@@ -33,51 +26,57 @@ p{
 
 .poput {
   font-family: 'Arial', 'Helvetica', sans-serif;
-  background-color: #2c2c2c;
-  color: white;
-  border-radius: 1rem;
+  background-color: #ff00ff; /* Magenta */
+  color: #000;
+  border: 4px solid #000;
+  border-radius: 0;
   width: 60vw;
   padding: 2rem;
+  box-shadow: 12px 12px 0px #000;
 }
 
-
 .titulo-swal {
-  background-color: orange;
-  color: white;
+  background-color: #ffff00;
+  color: #000;
   width: 100vw;
   padding: 0.5rem;
   font-size: 1.5rem;
+  font-weight: 900;
+  border-bottom: 4px solid #000;
 }
-
 
 .input-swal,
 .textarea-swal {
-
-  border-radius: 1rem;
-  background-color: black;
-  color: white;
-
+  border-radius: 0;
+  background-color: white;
+  color: black;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px black;
   padding: 1rem;
   font-size: 1rem;
   margin-top: 0.5rem;
 }
 
 .my-custom-confirm-button-class {
-  background-color: orange;
-  color: white;
-  border: none;
-  border-radius: 1rem;
+  background-color: #00ffff;
+  color: #000;
+  font-weight: 900;
+  border: 4px solid #000;
+  border-radius: 0;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  box-shadow: 6px 6px 0px #000;
 }
 
 .my-custom-cancel-button-class {
-  background-color: gray;
-  color: white;
-  border: none;
-  border-radius: 1rem;
+  background-color: #ff00ff;
+  color: #000;
+  font-weight: 900;
+  border: 4px solid #000;
+  border-radius: 0;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  box-shadow: 6px 6px 0px #000;
 }
 
 @keyframes slide-fwd-center {
