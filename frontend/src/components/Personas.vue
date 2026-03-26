@@ -18,7 +18,14 @@
           </g>
         </svg>
         <p>{{ ubicacion }}</p>
+      </div>
 
+      <div v-if="programa" style="display: flex; gap: 1rem; margin-top: 0.3rem; color: #ff00ff;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+          <path fill="currentColor"
+            d="M21 6h-7.59l2.3-2.29c.39-.39.39-1.02 0-1.41a.996.996 0 0 0-1.41 0L12 4.59L9.71 2.3a.996.996 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 14H3V8h18zM9 10v8l7-4z" />
+        </svg>
+        <p style="font-size: 0.85rem; font-style: italic;">{{ programa }}</p>
       </div>
     </div>
 
@@ -36,6 +43,10 @@ export default {
     ubicacion: {
       type: String,
       required: true
+    },
+    programa: {
+      type: String,
+      required: false
     }
   }
 };

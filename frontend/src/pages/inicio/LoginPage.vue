@@ -6,39 +6,14 @@
     <div class="contenedor_login">
       <form class="formulario" @submit.prevent="iniciarSesion">
         <div class="icono">
-          <svg xmlns="http://www.w3.org/2000/svg" width="9em" height="9em" viewBox="0 0 20 20">
-            <g fill="none">
-              <path fill="url(#fluentColorPerson200)"
-                d="M5.009 11A2 2 0 0 0 3 13c0 1.691.833 2.966 2.135 3.797C6.417 17.614 8.145 18 10 18s3.583-.386 4.865-1.203C16.167 15.967 17 14.69 17 13a2 2 0 0 0-2-2z" />
-              <path fill="url(#fluentColorPerson201)"
-                d="M5.009 11A2 2 0 0 0 3 13c0 1.691.833 2.966 2.135 3.797C6.417 17.614 8.145 18 10 18s3.583-.386 4.865-1.203C16.167 15.967 17 14.69 17 13a2 2 0 0 0-2-2z" />
-              <path fill="url(#fluentColorPerson202)" d="M10 2a4 4 0 1 0 0 8a4 4 0 0 0 0-8" />
-              <defs>
-                <linearGradient id="fluentColorPerson200" x1="6.329" x2="8.591" y1="11.931" y2="19.153"
-                  gradientUnits="userSpaceOnUse">
-                  <stop offset=".125" stop-color="#e5d68b" />
-                  <stop offset="1" stop-color="#ddbc46" />
-                </linearGradient>
-                <linearGradient id="fluentColorPerson201" x1="10" x2="13.167" y1="10.167" y2="22"
-                  gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#bf9d22" stop-opacity="0" />
-                  <stop offset="1" stop-color="#9e6f1f" />
-                </linearGradient>
-                <linearGradient id="fluentColorPerson202" x1="7.902" x2="11.979" y1="3.063" y2="9.574"
-                  gradientUnits="userSpaceOnUse">
-                  <stop offset=".125" stop-color="#e5d68b" />
-                  <stop offset="1" stop-color="#ddbc46" />
-                </linearGradient>
-              </defs>
-            </g>
-          </svg>
+          <img src="/personaje_login.png" alt="Finn" style="width: 10rem; height: 10rem; border-radius: 50%; border: 4px solid black; background: white; padding: 5px; box-shadow: 6px 6px 0px black; margin-bottom: 1rem;">
         </div>
         <h1 class="titulo">Iniciar Sesion</h1>
         <hr style="border: none; height: 2px; background-color: #333; width: 80%; margin: 20px auto;">
         <label>Correo:</label>
-        <input type="email" v-model="form.email" required>
+        <input type="email" v-model="form.email" required autocomplete="off">
         <label>Contraseña:</label>
-        <input type="password" v-model="form.password" required>
+        <input type="password" v-model="form.password" required autocomplete="current-password">
         <button class="boton_inicio" type="submit">Iniciar</button>
       </form>
     </div>
@@ -149,6 +124,14 @@ const iniciarSesion = async () => {
 .titulo {
   text-align: center;
   color: black;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  -webkit-text-stroke: 1.5px black;
+  text-shadow: 4px 4px 0px white;
+  margin-bottom: 0.5rem;
 }
 
 .formulario {

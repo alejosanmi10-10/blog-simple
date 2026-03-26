@@ -10,11 +10,13 @@
         <label>Nombre:</label>
         <input type="text" v-model="form.user" required>
         <label>Correo:</label>
-        <input type="email" v-model="form.email" required>
+        <input type="email" v-model="form.email" required autocomplete="off">
         <label>Contraseña:</label>
-        <input type="password" v-model="form.password" maxlength="12" minlength="8" required>
+        <input type="password" v-model="form.password" maxlength="12" minlength="8" required autocomplete="new-password">
         <label>Ciudad:</label>
         <input type="text" v-model="form.ciudad" required>
+        <label>Programa Favorito:</label>
+        <input type="text" v-model="form.programa_favorito" required placeholder="Ej: Hora de Aventura">
         <button class="boton_inicio" type="submit">Enviar</button>
       </form>
     </div>
@@ -32,7 +34,8 @@ const form = ref({
   user: '',
   email: '',
   password: '',
-  ciudad: ''
+  ciudad: '',
+  programa_favorito: ''
 });
 
 const registroUser = async () => {
@@ -41,7 +44,8 @@ const registroUser = async () => {
       user: form.value.user,
       email: form.value.email,
       password: form.value.password,
-      ciudad: form.value.ciudad
+      ciudad: form.value.ciudad,
+      programa_favorito: form.value.programa_favorito
     };
 
     console.log('Datos del usuario en formato JSON:', userData);
@@ -157,6 +161,14 @@ const registroUser = async () => {
 .titulo {
   text-align: center;
   color: black;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  -webkit-text-stroke: 1.5px black;
+  text-shadow: 4px 4px 0px white;
+  margin-bottom: 0.5rem;
 }
 
 

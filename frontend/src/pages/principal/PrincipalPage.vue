@@ -5,7 +5,7 @@
         <h1 class="titulo">Personas</h1>
         <hr class="separator">
         <div class="listaUsuarios">
-          <Personas v-for="usuario in usuarios" :key="usuario.id" :nombre="usuario.user" :ubicacion="usuario.ciudad" />
+          <Personas v-for="usuario in usuarios" :key="usuario.id" :nombre="usuario.user" :ubicacion="usuario.ciudad" :programa="usuario.programa_favorito" />
         </div>
       </div>
 
@@ -31,9 +31,26 @@
       <div class="listaPublicaciones">
         <Publicacion v-for="publicacion in publicacionesFiltradas" :key="publicacion.id" :creador="publicacion.usuario"
           :fecha="publicacion.fecha" :titulo="publicacion.titulo" :categoria="publicacion.categoria"
-          :texto="publicacion.texto" :id="publicacion.id" />
+          :texto="publicacion.texto" :id="publicacion.id" @ver-detalle="abrirDetalle" />
       </div>
     </div>
+
+    <!-- MODAL DE VISTA EXPANDIDA (MODO FOCO) -->
+    <Transition name="fade">
+      <div v-if="mostrarDetalle" class="modal_overlay" @click.self="cerrarDetalle">
+        <div class="modal_contenido scale-up-center">
+          <button class="boton_cerrar_modal" @click="cerrarDetalle">X</button>
+          <Publicacion 
+            :creador="postSeleccionado.creador"
+            :fecha="postSeleccionado.fecha" 
+            :titulo="postSeleccionado.titulo" 
+            :categoria="postSeleccionado.categoria"
+            :texto="postSeleccionado.texto" 
+            :id="postSeleccionado.id" 
+          />
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -57,6 +74,8 @@ export default {
     const usuarios = ref([]);
     const ranking = ref([]);
     const textoBusqueda = ref("");
+    const mostrarDetalle = ref(false);
+    const postSeleccionado = ref(null);
 
     //FILTRA POR TITULO O POR CONTENIDO DE TEXTO
     const publicacionesFiltradas = computed(() => {
@@ -106,12 +125,28 @@ export default {
 
     });
 
+    const abrirDetalle = (post) => {
+      postSeleccionado.value = post;
+      mostrarDetalle.value = true;
+      document.body.style.overflow = 'hidden'; 
+    };
+
+    const cerrarDetalle = () => {
+      mostrarDetalle.value = false;
+      postSeleccionado.value = null;
+      document.body.style.overflow = 'auto';
+    };
+
     return {
       publicaciones,
       usuarios,
       textoBusqueda,
       publicacionesFiltradas,
-      ranking
+      ranking,
+      mostrarDetalle,
+      postSeleccionado,
+      abrirDetalle,
+      cerrarDetalle
     };
   }
 }
@@ -261,5 +296,78 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+/* ESTILOS DEL MODAL (MODO FOCO) */
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 2rem;
+  backdrop-filter: blur(5px);
+}
+
+.modal_contenido {
+  background-color: #00ffff; /* Cyan base for high impact */
+  padding: 2.5rem;
+  border: 6px solid black;
+  box-shadow: 20px 20px 0px black;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.boton_cerrar_modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #ff00ff;
+  color: black;
+  border: 4px solid black;
+  font-size: 1.5rem;
+  font-weight: 900;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px black;
+  z-index: 100;
+  transition: all 0.2s;
+}
+
+.boton_cerrar_modal:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0px black;
+  background-color: #ffff00;
+}
+
+/* Animaciones */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .modal_overlay {
+    padding: 1rem;
+  }
+  .modal_contenido {
+    padding: 1.5rem 1rem;
+    border-width: 4px;
+    box-shadow: 10px 10px 0px black;
+  }
 }
 </style>

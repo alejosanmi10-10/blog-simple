@@ -65,10 +65,10 @@ async function login(req, res) {
 
 async function register(req, res) {
     try {
-        const { user,email,password,ciudad } = req.body;
+        const { user,email,password,ciudad,programa_favorito } = req.body;
 
        
-        if (!user || !password || !email ||!ciudad) {
+        if (!user || !password || !email || !ciudad || !programa_favorito) {
             return res.status(400).send({ status: "Error", message: "Los campos están incompletos" });
         }
 
@@ -88,8 +88,8 @@ async function register(req, res) {
             const hashContraseña = await bcryptjs.hash(password, salt);
             const fechaCreacion = new Date().toISOString().split('T')[0];
 
-            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad) VALUES (?, ?, ?, ?, ?)";
-            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion,ciudad], (insertError, insertResults, insertFields) => {
+            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad, programa_favorito) VALUES (?, ?, ?, ?, ?, ?)";
+            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion, ciudad, programa_favorito], (insertError, insertResults, insertFields) => {
                 if (insertError) {
                     console.error("Error al registrar al usuario:", insertError);
                     return res.status(500).send({ status: "Error", message: "Error interno del servidor" });
@@ -248,7 +248,7 @@ function eliminarPublicacion(req, res) {
   }
 
 function imprimirUsuarios(callback) {
-    const sql = `SELECT U.user, U.ciudad FROM users U`;
+    const sql = `SELECT U.user, U.ciudad, U.programa_favorito FROM users U`;
   
     connection.query(sql, (err, result) => {
       if (err) {

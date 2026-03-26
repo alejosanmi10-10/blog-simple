@@ -1,5 +1,5 @@
 <template>
-  <div class="contenedor_publicacion scale-up-center">
+  <div class="contenedor_publicacion scale-up-center" @click="emitirDetalle" style="cursor: pointer;">
     <div style="display: flex; justify-content: space-between;">
       <div style="display: flex; gap: 1rem; align-items: center; justify-content: center;">
         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512" style="color: black;">
@@ -25,7 +25,7 @@
       </p>
       <div style="text-align: right; margin-top: 1rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24" class="icono_comentar"
-          @click.prevent="agregarMensaje">
+          @click.stop="agregarMensaje">
           <path fill="currentColor"
             d="M6 14h12v-2H6zm0-3h12V9H6zm0-3h12V6H6zM4 18q-.825 0-1.412-.587T2 16V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v18l-4-4z" />
         </svg>
@@ -61,7 +61,7 @@ export default {
   texto: String,
   id: Number,
 },
-  setup(props) {
+  setup(props, { emit }) {
 
     const comentarios = ref([])
     const data = JSON.parse(localStorage.getItem("userData"))
@@ -83,6 +83,17 @@ export default {
         ImprimirComentarios(props.id)
 
       }
+    };
+
+    const emitirDetalle = () => {
+      emit('ver-detalle', {
+        creador: props.creador,
+        fecha: props.fecha,
+        titulo: props.titulo,
+        categoria: props.categoria,
+        texto: props.texto,
+        id: props.id
+      });
     };
 
     async function ImprimirComentarios(valor) {
@@ -117,7 +128,7 @@ export default {
       agregarMensaje,
       comentarios,
       EliminarComentario,
-    
+      emitirDetalle
     };
   }
 }
