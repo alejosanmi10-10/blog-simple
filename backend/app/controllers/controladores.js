@@ -139,11 +139,11 @@ function crearPublicacion(req, res, next) {
       connection.query(sqlInsert, [id_usuario, titulo, categoria, texto], (err, result) => {
         if (err) {
           console.error("Error al crear la publicación:", err);
-          return res.status(500).send({ mensaje: "Error al crear la publicación" });
+          return res.status(500).send({ message: "Error al crear la publicación" });
         }
         
         console.log(`Se ha creado una nueva publicación con ID: ${result.insertId}`);
-        res.send({ mensaje: "Publicación creada con éxito", id: result.insertId });
+        res.send({ message: "Publicación creada con éxito", id: result.insertId });
       });
     });
   }
@@ -190,7 +190,7 @@ function eliminarPublicacion(req, res) {
         }
         
         if (results.length === 0) {
-          return res.status(404).send({ mensaje: 'Publicación no encontrada' });
+          return res.status(404).send({ message: 'Publicación no encontrada' });
         }
         
         const sql = `DELETE FROM publicaciones WHERE id = ?`;
@@ -201,13 +201,13 @@ function eliminarPublicacion(req, res) {
           }
           
           res.send({
-            mensaje: `Publicación eliminada con éxito `,
+            message: `Publicación eliminada con éxito `,
           });
         });
       });
     } catch (err) {
       console.error(err);
-      res.status(500).send({ mensaje: 'Error al eliminar publicación' });
+      res.status(500).send({ message: 'Error al eliminar publicación' });
     }
   }
 
@@ -227,7 +227,7 @@ function eliminarPublicacion(req, res) {
   
        
         if (resultado.length > 0 && resultado[0].id !== parseInt(id)) {
-          return res.status(400).send({ mensaje: 'Título ya existe' });
+          return res.status(400).send({ message: 'Título ya existe' });
         }
   
     
@@ -238,12 +238,12 @@ function eliminarPublicacion(req, res) {
             return res.status(500).send({ status: "Error", message: "Error en la base de datos" });
           }
   
-          res.send({ mensaje: `Publicación actualizada con éxito` });
+          res.send({ message: `Publicación actualizada con éxito` });
         });
       });
     } catch (err) {
       console.error(err);
-      res.status(500).send({ mensaje: 'Error al actualizar publicación' });
+      res.status(500).send({ message: 'Error al actualizar publicación' });
     }
   }
 
@@ -297,7 +297,7 @@ function imprimirUsuarios(callback) {
 
     } catch (err) {
         console.error("Error en el try-catch:", err);
-        res.status(500).send({ mensaje: 'Error al obtener los comentarios' });
+        res.status(500).send({ message: 'Error al obtener los comentarios' });
     }
 }
 
@@ -314,9 +314,9 @@ function crearComentario(req, res, next) {
                        VALUES (?, ?, ?, DATE(NOW()))`;
     connection.query(sqlInsert, [id_usuario, id_publicacion, comentario], (err, result) => {
       if (err) {
-        return res.status(500).send({ mensaje: err});
+        return res.status(500).send({ message: "Error en la base de datos (Columna 'fecha' probablemente ausente)"});
       }
-      res.send({ mensaje: "comentario creado con exito", id: result.insertId });
+      res.send({ message: "comentario creado con exito", id: result.insertId });
     });
 
 }
@@ -334,7 +334,7 @@ function eliminarComentario(req, res) {
       }
       
       if (results.length === 0) {
-        return res.status(404).send({ mensaje: 'Comentario ausente' });
+        return res.status(404).send({ message: 'Comentario ausente' });
       }
       
       const sql = `DELETE FROM comentarios WHERE id = ?`;
@@ -345,13 +345,13 @@ function eliminarComentario(req, res) {
         }
         
         res.send({
-          mensaje: `Comentario eliminado exitosamente `,
+          message: `Comentario eliminado exitosamente `,
         });
       });
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ mensaje: 'Error al eliminar comentario' });
+    res.status(500).send({ message: 'Error al eliminar comentario' });
   }
 }
 

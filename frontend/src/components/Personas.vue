@@ -1,7 +1,7 @@
 <template>
   
   <div class="contenedor_persona">
-    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 32 32" class="figura">
+    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 32 32" class="figura">
       <path fill="currentColor"
         d="M18 30h-4a2 2 0 0 1-2-2v-7a2 2 0 0 1-2-2v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2m-5-18a.94.94 0 0 0-1 1v6h2v9h4v-9h2v-6a.94.94 0 0 0-1-1zm3-3a4 4 0 1 1 4-4a4 4 0 0 1-4 4m0-6a2 2 0 1 0 2 2a2 2 0 0 0-2-2" />
     </svg>
@@ -40,45 +40,49 @@ export default {
   }
 };
 </script>
-<style>
-@keyframes slide-fwd-center {
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(4.5);
-  }
-}
-
+<style scoped>
 .contenedor_persona {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 0.2rem 2rem;
-  background-color: rgb(255, 255, 255);
+  grid-template-columns: 25% 75%;
+  padding: 0.8rem 1.2rem;
+  background-color: #ffff00; /* Yellow */
   color: black;
-  justify-content: center;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px black;
+  margin-bottom: 2rem;
+  width: 100%;
   align-items: center;
-  border-radius: 5rem;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s;
 }
 
 .contenedor_persona:hover {
-  animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  background-color: rgb(1, 5, 73);
-  color: white;
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px black;
+  background-color: #00ffff;
 }
 
 .info_personas {
   display: flex;
   flex-direction: column;
-  line-height: 0;
+  line-height: 1.2;
+}
 
+.info_personas h3 {
+  margin: 0;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+}
+
+.info_personas p {
+  font-weight: 900;
+  margin: 0;
+  font-size: 0.9rem;
 }
 
 .figura {
-  margin: 0 auto;
-
-  color: orange;
+  margin: 0;
+  color: black;
 }
 </style>

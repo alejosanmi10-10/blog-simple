@@ -120,25 +120,47 @@ export default {
 <style>
 .vistas {
   display: grid;
-  grid-template-columns: 25% 75%;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1400px;
+  grid-template-columns: 320px 1fr; /* Fixed width sidebar for stability */
+  gap: 3rem;
+  padding: 2rem 4rem;
+  max-width: 1600px;
   margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .vistas {
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .vistas {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
 }
 
 .contenedor {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .titulo {
-  text-align: center;
-  padding-top: 10px;
+  text-align: left; /* Align left for better flow with boxes */
+  padding-left: 10px;
   color: white;
   font-family: 'League Spartan', sans-serif;
-  font-size: 2.5rem;
+  font-size: 3rem;
   -webkit-text-stroke: 2px black;
-  text-shadow: 4px 4px 0px black;
+  text-shadow: 6px 6px 0px black;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .titulo { font-size: 2rem; }
 }
 
 .separator {
@@ -155,7 +177,8 @@ export default {
   border: 4px solid black;
   box-shadow: 8px 8px 0px black;
   padding: 1rem;
-  height: 30vh;
+  height: auto;
+  max-height: 30vh;
   overflow-y: auto;
   gap: 1rem;
   margin-bottom: 2rem;
@@ -167,26 +190,39 @@ export default {
 
 .busqueda {
   display: flex;
-  gap: 1rem;
+  gap: 0;
   color: black;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 20px 0 40px 0;
+}
+
+.busqueda svg {
+  background: black;
+  color: #ffff00;
+  padding: 10px;
+  border: 4px solid black;
 }
 
 .campo_busqueda {
-  width: 60%;
-  height: 3rem;
+  flex-grow: 1;
+  height: 3.5rem;
   border: 4px solid black;
-  box-shadow: 6px 6px 0px black;
-  padding: 0.5rem 1rem;
-  font-size: 1.2rem;
-  font-weight: bold;
+  border-left: none;
+  box-shadow: 8px 8px 0px black;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 900;
   border-radius: 0;
   outline: none;
   transition: all 0.2s;
+  font-family: 'League Spartan', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .campo_busqueda { width: 85%; height: 2.5rem; }
 }
 
 .campo_busqueda:focus {
@@ -200,10 +236,19 @@ export default {
   gap: 1rem;
   display: flex;
   flex-direction: column;
-  height: 75vh;
-  overflow-y: auto;
+  height: auto;
+  min-height: 50vh;
+  overflow-y: visible;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1rem;
+}
+
+@media (min-width: 992px) {
+  .listaPublicaciones {
+    height: 75vh;
+    overflow-y: auto;
+    padding: 0 2rem;
+  }
 }
 
 .listaPublicaciones::-webkit-scrollbar {

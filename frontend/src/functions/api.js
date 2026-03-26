@@ -110,7 +110,7 @@ export async function deletePost(id) {
   try {
     const response = await axios.delete(`/api/publicacion/${id}`);
     console.log(response);
-    swallTrue(`${response.data.mensaje}`);
+    swallTrue(`${response.data.message}`);
     return response;
   } catch (error) {
     console.error(error);
@@ -133,14 +133,14 @@ export async function editPost(id, data) {
   try {
     const response = await axios.put(`/api/publicacion/${id}`, data);
     console.log(response);
-    swallTrue(`${response.data.mensaje}`);
+    swallTrue(`${response.data.message}`);
 
     return response;
   } catch (error) {
     console.error(error);
     swallError(
       `Error al editar la publicación: ${
-        error.response?.data?.mensaje || "Error desconocido"
+        error.response?.data?.message || "Error desconocido"
       }`
     );
     throw error;
@@ -185,7 +185,7 @@ export async function deleteComentario(id) {
     const response = await axios.delete(`/api/comentarios/${id}`);
     console.log(response);
 
-    swallTrue(`${response.data.mensaje}`);
+    swallTrue(`${response.data.message}`);
     return response;
   } catch (error) {
     // Manejar error

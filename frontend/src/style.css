@@ -2,8 +2,9 @@ html, body, #app {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden; /* Esto evitará el scroll si no es necesario */
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 html {

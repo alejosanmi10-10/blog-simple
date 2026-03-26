@@ -1,8 +1,7 @@
 <template>
   <div class="header">
-    <router-link to="/dashboard/banner">
-      <img src="../../public/logo_cn.svg" width="10%" />
-
+    <router-link to="/dashboard/banner" class="logo-link">
+      <img src="../../public/logo_cn.svg" class="header-logo" />
     </router-link>
     <div class="contenido">
       <router-link to="/dashboard/prueba" style="text-decoration: none; color: white;">
@@ -86,33 +85,71 @@ export default {
   background-color: #ffff00;
   border-bottom: 6px solid #000;
   width: 100%;
-  padding: 0.5rem 3rem;
+  padding: 0.5rem 2rem;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-logo {
+  width: 60px;
+  display: block;
 }
 
 .contenido {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1rem;
-  color: white;
-  width: 93%;
-  position: fixed;
-  padding-top: 1rem;
-  transition: color 0.3s ease;
+  gap: 2rem;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+.cerrar {
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .cerrar:hover {
-  color: orange;
+  color: #ff00ff;
+  transform: scale(1.1);
 }
 
 .usuario {
-  background-color: orange;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
+  background-color: #00ffff;
+  color: black;
+  padding: 0.6rem 2rem;
+  border: 4px solid black;
+  box-shadow: 5px 5px 0px black;
+  font-weight: 900;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-family: 'League Spartan', sans-serif;
+  margin-left: 1rem;
 }
 
 .usuario:hover {
-  background-color: rgb(134, 88, 3);
+  background-color: #ff00ff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0.5rem 1rem;
+  }
+  .header-logo {
+    width: 45px;
+  }
+  .contenido {
+    gap: 0.8rem;
+  }
+  .usuario {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 0px black;
+  }
 }
 </style>

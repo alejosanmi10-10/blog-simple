@@ -1,9 +1,9 @@
 <template>
-  <div style="padding-top: 8rem; padding-bottom: 2rem; text-align: center;">
-    <h1 style="font-size: 4rem; color: #ffff00; -webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px black; text-transform: uppercase; font-family: 'League Spartan', sans-serif; margin-bottom: 2rem;">
+  <div class="prueba-container">
+    <h1 class="prueba-title">
       Curiosidades C.N.
     </h1>
-    <div style="display: flex; flex-direction: column; max-width: 800px; margin: 0 auto; gap: 10px;">
+    <div class="cards-wrapper">
       <CardPrueba v-for="info in data" :key="info.id" :titulo="info.titulo" :descripcion="info.texto" />
     </div>
   </div>
@@ -73,3 +73,41 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.prueba-container {
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.prueba-title {
+  font-size: 4rem;
+  color: #ffff00;
+  -webkit-text-stroke: 2px black;
+  text-shadow: 4px 4px 0px black;
+  text-transform: uppercase;
+  font-family: 'League Spartan', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  gap: 20px;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .prueba-title {
+    font-size: 2.2rem;
+    margin-top: 3rem;
+  }
+  .prueba-container {
+    padding-top: 2rem;
+  }
+}
+</style>

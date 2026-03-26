@@ -23,12 +23,16 @@
   </header>
   <div class="contenedor">
     <div class="informacion">
-      <p class="info" style="color: black; font-weight: 900; font-size: 2.5rem; text-shadow: 2px 2px 0px white;">¡BIENVENIDOS AL C.N.!</p>
-      <h1 style="color: #ff00ff; text-shadow: 4px 4px 0px black; -webkit-text-stroke: 2px black;">Tus shows favoritos te esperan.</h1>
-      <p class="info2" style="color: black; font-weight: bold; background: white; padding: 10px; border: 4px solid black; display: inline-block;">Únete a nuestra aventura web. Comienza ahora</p>
+      <div class="headline-container">
+        <p class="welcome-text">¡BIENVENIDOS AL C.N.!</p>
+        <h1 class="main-title">Tus shows favoritos <br> <span class="highlight">te esperan.</span></h1>
+        <p class="cta-banner">Únete a nuestra aventura web. ¡Comienza ahora!</p>
+      </div>
 
-      <button class="boton registro"> <router-link class="link" to="/registro">Registrate</router-link></button>
-      <button class="boton login"><router-link class="link" to="/inicio">Iniciar Sesion</router-link></button>
+      <div class="button-group">
+        <router-link class="boton registro" to="/registro">Registrate</router-link>
+        <router-link class="boton login" to="/inicio">Iniciar Sesion</router-link>
+      </div>
     </div>
 
   </div>
@@ -59,8 +63,8 @@ header {
   margin: 0 auto;
   padding: 0;
   display: flex;
-  height: 100vh;
-
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .contenedor_iconos {
@@ -85,53 +89,140 @@ header {
 }
 
 .informacion {
-  margin-top: 9rem;
-  color: white;
-  padding: 2rem;
-  font-size: 3rem;
-  width: 70%;
-  height: 100vh;
+  margin-top: 8rem;
+  padding: 1rem 3rem;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
-.info {
-  font-size: 1.5rem;
-  color: rgb(189, 140, 34);
-  font-weight: bold;
+.headline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transform: rotate(-2deg); /* Divertido tilt */
 }
 
-.info2 {
+.welcome-text {
   font-size: 1.2rem;
+  font-weight: 900;
+  color: white;
+  background-color: black;
+  width: fit-content;
+  padding: 4px 15px;
+  text-transform: uppercase;
+  font-family: 'League Spartan', sans-serif;
+  box-shadow: 4px 4px 0px #00ffff;
+  margin-bottom: 0.5rem;
 }
 
+.main-title {
+  font-size: 4rem;
+  color: #ff00ff;
+  font-weight: 900;
+  font-family: 'League Spartan', sans-serif;
+  line-height: 0.85;
+  text-transform: uppercase;
+  -webkit-text-stroke: 3px black;
+  filter: drop-shadow(6px 6px 0px black);
+  margin: 0.5rem 0;
+}
+
+.highlight {
+  color: #ffff00;
+  font-size: 5rem;
+  display: inline-block;
+  transform: scale(1.05);
+}
+
+.cta-banner {
+  font-size: 1.1rem;
+  color: black;
+  font-weight: 900;
+  background: white;
+  padding: 10px 20px;
+  border: 4px solid black;
+  width: fit-content;
+  box-shadow: 6px 6px 0px black;
+  text-transform: uppercase;
+  font-family: 'League Spartan', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1.5rem;
+  transform: rotate(1deg);
+}
 
 .boton {
-  width: 20%;
-  color: white;
-  border: none;
-  font-size: 1.2rem;
-  margin: 2rem 1rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 4px solid black;
+  font-family: 'League Spartan', sans-serif;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
 }
 
 .registro {
-  background-color: rgb(255, 182, 25);
-  transition: background-color 0.3s ease;
+  background-color: #ffff00;
+  color: black;
+  box-shadow: 6px 6px 0px black;
 }
 
 .registro:hover {
-  background-color: rgb(120, 83, 1);
-  animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-
+  background-color: #ff00ff;
+  color: white;
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px black;
 }
 
 .login {
-  background-color: rgb(0, 45, 123);
-  transition: background-color 0.3s ease;
-
+  background-color: #00ffff;
+  color: black;
+  box-shadow: 6px 6px 0px black;
 }
 
 .login:hover {
-  background-color: rgb(2, 19, 48);
-  animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  background-color: black;
+  color: #00ffff;
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px black;
+}
 
+@media (max-width: 992px) {
+  .main-title { font-size: 3rem; }
+  .highlight { font-size: 3.5rem; }
+  .informacion { margin-top: 6rem; padding: 1rem; }
+}
+
+@media (max-width: 768px) {
+  .informacion { 
+    align-items: center; 
+    text-align: center;
+    margin-top: 5rem;
+  }
+  .headline-container { transform: rotate(0deg); align-items: center; }
+  .main-title { font-size: 2.5rem; }
+  .highlight { font-size: 3rem; }
+  .button-group { 
+    flex-direction: column; 
+    width: 100%; 
+    gap: 1rem;
+    transform: rotate(0deg);
+  }
+  .boton { width: 100%; min-width: unset; }
+  .cta-banner { font-size: 0.9rem; padding: 8px 15px; }
+  .welcome-text { font-size: 1rem; }
 }
 </style>

@@ -72,4 +72,24 @@
     box-shadow: 12px 12px 0px black;
     background-color: #ffff00;
 }
+
+@media (max-width: 768px) {
+    .caja-cn {
+        padding: 1.5rem;
+        width: 90%;
+        box-shadow: 8px 8px 0px black;
+        transform: rotate(0deg);
+    }
+    .caja-cn h1 {
+        font-size: 2.2rem;
+    }
+    .caja-cn p {
+        font-size: 1.2rem;
+    }
+    .boton-empezar {
+        font-size: 1.2rem;
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+    }
+}
 </style>

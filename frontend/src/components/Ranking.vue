@@ -33,53 +33,48 @@ export default {
 
 };
 </script>
-<style>
-@keyframes slide-fwd-center {
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(4.5);
-  }
-}
-
-.titulo_ranking{
-    line-height: 1.3rem;
-    margin: 3px;
-}
-
+<style scoped>
 .contenedor_ranking {
-  display: grid;
-  grid-template-columns: 20% 80%;
-  padding: 0.5rem 1rem;
+  display: flex;
+  padding: 0.8rem 1.2rem;
   background-color: #ff00ff; /* Magenta */
-  border: 3px solid black;
+  border: 4px solid black;
   box-shadow: 6px 6px 0px black;
   color: black;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
-  width: 90%;
-  transition: transform 0.2s;
+  margin-bottom: 2rem;
+  width: 100%;
+  transition: all 0.2s;
 }
 
 .contenedor_ranking:hover {
-  transform: scale(1.03);
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px black;
 }
-
 
 .info_personas {
   display: flex;
   flex-direction: column;
-  line-height: 0;
-  font-size: 13px;
+  line-height: 1.2;
+}
 
+.titulo_ranking {
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.info_personas p {
+  font-weight: 900;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .figura {
-  margin: 0 auto;
-
-  color: orange;
+  margin: 0;
+  color: black;
 }
 </style>

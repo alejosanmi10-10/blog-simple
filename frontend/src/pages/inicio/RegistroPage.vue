@@ -98,10 +98,11 @@ const registroUser = async () => {
 
 
 .c_registro {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
+  overflow-y: auto;
 }
 
 
@@ -123,14 +124,33 @@ const registroUser = async () => {
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  border: 5px solid black;
+  box-shadow: 10px 10px 0px black;
   width: 100%;
   max-width: 400px;
-  margin-left: auto;
-  margin-right: 3rem;
-  height: 100vh;
-  justify-content: center
+  margin: 2rem;
+  height: auto;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .c_registro {
+    flex-direction: column;
+    height: auto;
+    padding: 2rem 0;
+  }
+  .logo {
+    margin-bottom: 2rem;
+  }
+  .contenedor_login {
+    margin: 0 auto;
+    width: 90%;
+    padding: 1.5rem;
+  }
+  .imagen {
+    width: 15rem;
+  }
 }
 
 

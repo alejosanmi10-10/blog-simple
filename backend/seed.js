@@ -5,7 +5,7 @@ async function seed() {
     host: 'localhost',
     user: 'root',
     password: 'Alejosan1234',
-    database: 'laPlumaDigital'
+    database: 'cartoonnetwork'
   });
 
   const [users] = await connection.execute('SELECT id FROM users LIMIT 1');

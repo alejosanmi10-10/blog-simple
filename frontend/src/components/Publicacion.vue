@@ -16,7 +16,7 @@
       <div class="contenedor_titulo">
         <h1 class="titulo_publicacion">{{ titulo }}</h1>
       </div>
-      <p style="text-align: center; font-weight: bold; text-transform: uppercase; background: #00ffff; border: 3px solid black; padding: 5px; width: fit-content; margin: 0 auto; box-shadow: 3px 3px 0px black;">{{ categoria }}</p>
+      <p style="text-align: center; font-weight: 900; text-transform: uppercase; background: #00ffff; border: 4px solid black; padding: 5px 15px; width: fit-content; margin: 0 auto; box-shadow: 6px 6px 0px black; font-family: 'League Spartan', sans-serif;">{{ categoria }}</p>
 
       <hr style="border: none; border-bottom: 4px dashed black; width: 100%; margin: 20px 0;">
 

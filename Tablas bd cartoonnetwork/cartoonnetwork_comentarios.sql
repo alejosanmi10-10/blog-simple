@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: laplumadigital
+-- Host: localhost    Database: lacartoonnetwork
 -- ------------------------------------------------------
 -- Server version	8.0.36
 
@@ -16,33 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `publicaciones`
+-- Table structure for table `comentarios`
 --
 
-DROP TABLE IF EXISTS `publicaciones`;
+DROP TABLE IF EXISTS `comentarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `publicaciones` (
+CREATE TABLE `comentarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_usuario` int DEFAULT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `fecha` date DEFAULT NULL,
-  `categoria` varchar(100) DEFAULT NULL,
-  `texto` text,
+  `id_publicacion` int DEFAULT NULL,
+  `comentario` text,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
-  CONSTRAINT `publicaciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+  KEY `id_publicacion` (`id_publicacion`),
+  CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_publicacion`) REFERENCES `publicaciones` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `publicaciones`
+-- Dumping data for table `comentarios`
 --
 
-LOCK TABLES `publicaciones` WRITE;
-/*!40000 ALTER TABLE `publicaciones` DISABLE KEYS */;
-INSERT INTO `publicaciones` VALUES (2,37,'Título de la publicación','2024-10-28','Categoría de la publicación','Texto de la publicación'),(3,37,'publicacion1','2024-10-28','ecologia','texto para publicacion'),(4,38,'publicacion3','2024-10-28','economia','aqui va el texto'),(5,38,'publicacion4','2024-10-28','quimica','aqui va el texto');
-/*!40000 ALTER TABLE `publicaciones` ENABLE KEYS */;
+LOCK TABLES `comentarios` WRITE;
+/*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

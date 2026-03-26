@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: laplumadigital
+-- Host: localhost    Database: lacartoonnetwork
 -- ------------------------------------------------------
 -- Server version	8.0.36
 
@@ -16,32 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `comentarios`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `comentarios`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `comentarios` (
+CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_usuario` int DEFAULT NULL,
-  `id_publicacion` int DEFAULT NULL,
-  `comentario` text,
+  `user` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `dc` date DEFAULT NULL,
+  `ciudad` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_usuario` (`id_usuario`),
-  KEY `id_publicacion` (`id_publicacion`),
-  CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_publicacion`) REFERENCES `publicaciones` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comentarios`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `comentarios` WRITE;
-/*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (37,'emily','emily@correo.com','$2a$05$9gQlXM.l.uf6WICb0csmsuiclEz9TOvLMacWvUlh6.0OPpBaFJZCO','2024-10-29','cali'),(38,'andres','andres@correo.com','$2a$05$KLC4QXp9a.z4Wze5gulwU.WUdjJF/YnscMOZzcsBglTVxW5yk5LNm','2024-10-29','Bogota');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

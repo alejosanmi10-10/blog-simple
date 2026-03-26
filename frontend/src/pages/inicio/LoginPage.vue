@@ -85,11 +85,11 @@ const iniciarSesion = async () => {
 
 <style scoped>
 .c_registro {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-
+  overflow-y: auto;
 }
 
 
@@ -117,14 +117,33 @@ const iniciarSesion = async () => {
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 0;
+  border: 5px solid black;
+  box-shadow: 10px 10px 0px black;
   width: 100%;
   max-width: 400px;
-  margin-left: auto;
-  margin-right: 3rem;
-  height: 100vh;
+  margin: 2rem;
+  height: auto;
   justify-content: center;
+}
 
+@media (max-width: 768px) {
+  .c_registro {
+    flex-direction: column;
+    height: auto;
+    padding: 2rem 0;
+  }
+  .logo {
+    margin-bottom: 2rem;
+  }
+  .contenedor_login {
+    margin: 0 auto;
+    width: 90%;
+    padding: 1.5rem;
+  }
+  .imagen {
+    width: 15rem;
+  }
 }
 
 .titulo {
