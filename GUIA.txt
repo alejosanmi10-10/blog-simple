@@ -1,0 +1,72 @@
+PROYECTO LENGUAJE:
+ENDPOINT PARA USAR EN POSTMAN QUE FUNCIONAN HASTA EL MOMENTO:
+
+login:post
+http://localhost:3000/api/login
+
+body:
+{
+    "email":"lucia@correo.com",
+    "password":"lucia1"
+}
+
+registro:
+http://localhost:3000/api/register
+
+body:post
+{
+    "user":"pepe",
+    "email":"pepe@correo.com",
+    "password":"pepe1",
+    "ciudad":"Cali,Colombia"
+}
+
+cerrar sesión:get
+http://localhost:3000/api/logout
+
+
+crear publicación:post
+http://localhost:3000/api/publicacion
+
+body:
+{
+  "id_usuario": 35,
+  "titulo": "publicacion4",
+  "categoria": "quimica",
+  "texto": "aqui va el texto"
+}
+
+
+listar publicaciones: get
+http://localhost:3000/api/publicacion
+
+ESTAS SON LAS FUNCIONES QUE HAY HASTA AHORA- FALTA AGREGARLE VALIDACIONES
+---------------------------------------------------------------------------------
+USUARIOS PARA LOGIN:
+
+usuarios para iniciar sesión:
+emily@correo.com
+emily123
+
+andres@correo.com
+andres123
+
+----------------------------------------------------------------------------------
+CORRER PROYECTO
+
+FRONTEND:
+NPM I 
+NPM RUN DEV
+
+BACKEND:
+NPM I
+NPM START
+
+NO OLVIDAR AJUSTAR INFORMACION DE CONEXION BD EN .ENV
+------------------------------------------
+
+
+
+PREGUNTAS?:
++573153609570
+

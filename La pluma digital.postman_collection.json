@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "64892f9c-c239-4353-a219-ded6ceede9dc",
+		"name": "La pluma digital",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33971805",
+		"_collection_link": "https://johannaortiz.postman.co/workspace/My-Workspace~a45126d7-36c8-4b9c-8c8d-7adaa7144c88/collection/33971805-64892f9c-c239-4353-a219-ded6ceede9dc?action=share&source=collection_link&creator=33971805"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "REGISTRO",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"lucia@correo.com\",\r\n    \"password\":\"lucia1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CERRAR SESION",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "CREAR PUBLICACION",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario\": 35,\r\n  \"titulo\": \"publicacion3\",\r\n  \"categoria\": \"economia\",\r\n  \"texto\": \"aqui va el texto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publicacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publicacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREAR PUBLICACION Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario\": 35,\r\n  \"titulo\": \"Estrategias Efectivas para Ahorrar Dinero\",\r\n  \"categoria\": \"economia\",\r\n  \"texto\": \"aqui va el texto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publicacion/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publicacion",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRAER PUBLICACIONES",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario\": 35,\r\n  \"titulo\": \"publicacion3\",\r\n  \"categoria\": \"economia\",\r\n  \"texto\": \"aqui va el texto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publicacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publicacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar publicacion",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "traer comentarios",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_usuario\": 35,\r\n  \"titulo\": \"publicacion3\",\r\n  \"categoria\": \"economia\",\r\n  \"texto\": \"aqui va el texto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/publicacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"publicacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear comentario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_usuario\":40,\r\n    \"id_publicacion\":8,\r\n    \"comentario\":\"Excelente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/comentarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"comentarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar comentario",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "traer ranking",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
