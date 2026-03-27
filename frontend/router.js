@@ -9,6 +9,7 @@ import Perfil from './src/pages/principal/PerfilPage.vue'
 import Crear from './src/pages/principal/CrearPage.vue'
 import Banner from './src/pages/principal/BannerPage.vue'
 import Prueba from './src/pages/principal/PruebaPage.vue'
+import NotFound from './src/pages/NotFoundPage.vue'
 
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
       { path: 'banner', component:Banner },  
       { path: 'prueba', component:Prueba },  
     ]},
+  { path: '/:pathMatch(.*)*', component: NotFound },
 ];
 
 const router = createRouter({

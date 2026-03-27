@@ -13,8 +13,7 @@
         <h1 class="titulo">Ranking</h1>
         <hr class="separator">
         <div class="listaRanking">
-          <Ranking v-for="lista in ranking" :nombre="lista.titulo" :cantidad="lista.cantidad_comentarios" />
-
+          <Ranking v-for="lista in ranking" :key="lista.id" :id="lista.id" :nombre="lista.titulo" :cantidad="lista.cantidad_comentarios" @click-ranking="abrirDetalleDesdeRanking" />
         </div>
       </div>
 
@@ -80,9 +79,11 @@ export default {
     //FILTRA POR TITULO O POR CONTENIDO DE TEXTO
     const publicacionesFiltradas = computed(() => {
       if (!textoBusqueda.value) return publicaciones.value;
+      const busqueda = textoBusqueda.value.toLowerCase();
       return publicaciones.value.filter(publicacion =>
-        publicacion.titulo.toLowerCase().includes(textoBusqueda.value.toLowerCase())
-
+        publicacion.titulo.toLowerCase().includes(busqueda) ||
+        publicacion.categoria.toLowerCase().includes(busqueda) ||
+        publicacion.texto.toLowerCase().includes(busqueda)
       );
     });
 
@@ -137,6 +138,20 @@ export default {
       document.body.style.overflow = 'auto';
     };
 
+    const abrirDetalleDesdeRanking = (id) => {
+      const post = publicaciones.value.find(p => p.id === id);
+      if (post) {
+        abrirDetalle({
+          creador: post.usuario,
+          fecha: post.fecha,
+          titulo: post.titulo,
+          categoria: post.categoria,
+          texto: post.texto,
+          id: post.id
+        });
+      }
+    };
+
     return {
       publicaciones,
       usuarios,
@@ -146,7 +161,8 @@ export default {
       mostrarDetalle,
       postSeleccionado,
       abrirDetalle,
-      cerrarDetalle
+      cerrarDetalle,
+      abrirDetalleDesdeRanking
     };
   }
 }
@@ -301,11 +317,8 @@ export default {
 /* ESTILOS DEL MODAL (MODO FOCO) */
 .modal_overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;

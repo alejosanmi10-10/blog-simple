@@ -9,11 +9,10 @@
 </template>
 <style>
 .vista{
-  width: 100vw;        
-  height: 100vh;       
+  width: 100%;        
+  min-height: 100vh;       
   color: black;
-  background-color: rgba(0, 0, 0, 0.7); 
-  
+  background-color: transparent !important; 
 }
 
 </style>

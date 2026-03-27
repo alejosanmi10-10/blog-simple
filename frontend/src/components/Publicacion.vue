@@ -23,13 +23,20 @@
       <p style="padding-top:1rem; text-align: justify; width: 100%; font-size: 1.1rem; line-height: 1.6; font-family: Arial, sans-serif;">
         {{ texto }}
       </p>
-      <div style="text-align: right; margin-top: 1rem;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24" class="icono_comentar"
-          @click.stop="agregarMensaje">
-          <path fill="currentColor"
-            d="M6 14h12v-2H6zm0-3h12V9H6zm0-3h12V6H6zM4 18q-.825 0-1.412-.587T2 16V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v18l-4-4z" />
-        </svg>
-      </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <div class="conteo_reacciones" @click.stop="toggleLike">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" 
+              :style="{ color: haReaccionado ? '#ff0000' : 'black' }">
+              <path fill="currentColor" d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/>
+            </svg>
+            <span class="total_reacciones">{{ totalReacciones }}</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" class="icono_comentar"
+            @click.stop="agregarMensaje">
+            <path fill="currentColor"
+              d="M6 14h12v-2H6zm0-3h12V9H6zm0-3h12V6H6zM4 18q-.825 0-1.412-.587T2 16V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v18l-4-4z" />
+          </svg>
+        </div>
 
       <div class="contenedor_comentarios">
         <Comentario v-for="comentario in comentarios" :usuario="comentario.usuario" :fecha="comentario.fecha"
@@ -43,7 +50,7 @@
 <script>
 import Comentario from './Comentario.vue';
 import { swallInput } from '../functions/alerts';
-import { TraerComentarios, crearComentario, deleteComentario, formatearFecha } from '../functions/api';
+import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones } from '../functions/api';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
@@ -120,15 +127,39 @@ export default {
       }
     }
 
+    const totalReacciones = ref(0);
+    const haReaccionado = ref(false);
+
+    const toggleLike = async () => {
+      try {
+        const res = await reaccionar({ id_usuario, id_publicacion: props.id });
+        if (res.status === "ok") {
+          haReaccionado.value = (res.accion === "puesto");
+          await actualizarReacciones();
+        }
+      } catch (error) {
+        console.error("Error al reaccionar:", error);
+      }
+    };
+
+    const actualizarReacciones = async () => {
+      const res = await TraerReacciones(props.id);
+      totalReacciones.value = res.total;
+    };
+
     onMounted(async () => {
       await ImprimirComentarios(props.id);
+      await actualizarReacciones();
     });
 
     return {
       agregarMensaje,
       comentarios,
       EliminarComentario,
-      emitirDetalle
+      emitirDetalle,
+      totalReacciones,
+      haReaccionado,
+      toggleLike
     };
   }
 }
@@ -189,6 +220,30 @@ export default {
   background-color: #00ffff;
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px black;
+}
+
+.conteo_reacciones {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: white;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px black;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.conteo_reacciones:hover {
+  background-color: #ff00ff;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px black;
+}
+
+.total_reacciones {
+  font-weight: 900;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1.2rem;
 }
 
 .contenedor_comentarios {

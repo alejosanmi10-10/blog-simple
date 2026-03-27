@@ -16,4 +16,6 @@ app.config.globalProperties.$axios = axios;
 
 app.use(router);
 
+// Actualización de fondo HD - v8
+console.log('%c V8 FINAL VERSION ACTIVE ', 'background: #222; color: #bada55; font-size: 20px;');
 app.mount('#app');

@@ -72,6 +72,15 @@ async function register(req, res) {
             return res.status(400).send({ status: "Error", message: "Los campos están incompletos" });
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).send({ status: "Error", message: "Formato de email inválido" });
+        }
+
+        if (password.length < 8) {
+            return res.status(400).send({ status: "Error", message: "La contraseña debe tener al menos 8 caracteres" });
+        }
+
        
         const query = "SELECT * FROM users WHERE user = ?";
         connection.query(query, [user], async (error, results, fields) => {
@@ -120,6 +129,10 @@ function crearPublicacion(req, res, next) {
 
     if (!id_usuario || !titulo || !categoria || !texto) {
       return res.status(400).send({ status: "Error", message: "Los campos están incompletos" });
+    }
+
+    if (titulo.length < 5 || titulo.length > 100) {
+      return res.status(400).send({ status: "Error", message: "El título debe tener entre 5 y 100 caracteres" });
     }
   
   
@@ -310,6 +323,10 @@ function crearComentario(req, res, next) {
     return res.status(400).send({ status: "Error", message: "faltan datos" });
   }
 
+  if (comentario.trim().length === 0 || comentario.length > 500) {
+    return res.status(400).send({ status: "Error", message: "El comentario no puede estar vacío ni superar los 500 caracteres" });
+  }
+
     const sqlInsert = `INSERT INTO comentarios (id_usuario, id_publicacion, comentario,fecha) 
                        VALUES (?, ?, ?, DATE(NOW()))`;
     connection.query(sqlInsert, [id_usuario, id_publicacion, comentario], (err, result) => {
@@ -374,7 +391,58 @@ LIMIT 3;`;
 
     console.log("Ranking:", result);
     return callback(null, { status: "ok", ranking: result });
-    
+  });
+}
+
+function reaccionar(req, res) {
+  const { id_usuario, id_publicacion } = req.body;
+
+  if (!id_usuario || !id_publicacion) {
+    return res.status(400).send({ status: "Error", message: "Datos incompletos" });
+  }
+
+  // Verificar si ya existe la reacción para eliminarla (toggle) o añadirla
+  const checkQuery = "SELECT * FROM reacciones WHERE id_usuario = ? AND id_publicacion = ?";
+  connection.query(checkQuery, [id_usuario, id_publicacion], (error, results) => {
+    if (error) {
+      // Si la tabla no existe, intentamos crearla primero (fallback dinámico)
+      const createTable = `CREATE TABLE IF NOT EXISTS reacciones (
+        id INT NOT NULL AUTO_INCREMENT,
+        id_usuario INT NOT NULL,
+        id_publicacion INT NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id_usuario) REFERENCES users(id),
+        FOREIGN KEY (id_publicacion) REFERENCES publicaciones(id)
+      )`;
+      connection.query(createTable, () => {
+        // Reintentar después de crear la tabla
+        return res.status(500).send({ status: "Error", message: "Tabla de reacciones creada, por favor intente de nuevo." });
+      });
+      return;
+    }
+
+    if (results.length > 0) {
+      // Eliminar reacción
+      const deleteQuery = "DELETE FROM reacciones WHERE id_usuario = ? AND id_publicacion = ?";
+      connection.query(deleteQuery, [id_usuario, id_publicacion], () => {
+        res.send({ status: "ok", message: "Reacción eliminada", accion: "quitado" });
+      });
+    } else {
+      // Añadir reacción
+      const insertQuery = "INSERT INTO reacciones (id_usuario, id_publicacion) VALUES (?, ?)";
+      connection.query(insertQuery, [id_usuario, id_publicacion], () => {
+        res.send({ status: "ok", message: "Reacción añadida", accion: "puesto" });
+      });
+    }
+  });
+}
+
+function obtenerReacciones(req, res) {
+  const { id_publicacion } = req.params;
+  const sql = "SELECT COUNT(*) as total FROM reacciones WHERE id_publicacion = ?";
+  connection.query(sql, [id_publicacion], (err, results) => {
+    if (err) return res.status(500).send(err);
+    res.send({ status: "ok", total: results[0].total });
   });
 }
 
@@ -391,6 +459,8 @@ editarPublicacion,
 imprimirComentarios,
 crearComentario,
 eliminarComentario,
-imprimirRanking
+imprimirRanking,
+reaccionar,
+obtenerReacciones
 
 }

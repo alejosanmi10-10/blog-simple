@@ -14,6 +14,7 @@
         <input type="email" v-model="form.email" required autocomplete="off">
         <label>Contraseña:</label>
         <input type="password" v-model="form.password" required autocomplete="current-password">
+        <small style="color: #666; margin-top: -0.5rem; margin-bottom: 1rem; font-weight: bold;">* Debe tener al menos 8 caracteres</small>
         <button class="boton_inicio" type="submit">Iniciar</button>
       </form>
     </div>
@@ -65,6 +66,7 @@ const iniciarSesion = async () => {
   display: flex;
   align-items: center;
   overflow-y: auto;
+  background-color: transparent !important; 
 }
 
 

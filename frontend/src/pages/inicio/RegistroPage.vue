@@ -13,6 +13,7 @@
         <input type="email" v-model="form.email" required autocomplete="off">
         <label>Contraseña:</label>
         <input type="password" v-model="form.password" maxlength="12" minlength="8" required autocomplete="new-password">
+        <small style="color: #666; margin-top: -0.5rem; margin-bottom: 1rem; font-weight: bold;">* Debe tener al menos 8 caracteres</small>
         <label>Ciudad:</label>
         <input type="text" v-model="form.ciudad" required>
         <label>Programa Favorito:</label>
@@ -38,7 +39,14 @@ const form = ref({
   programa_favorito: ''
 });
 
+import { swallError, swallTrue } from '../../functions/alerts.js';
+
 const registroUser = async () => {
+  if (form.value.password.length < 6) {
+    swallError("La contraseña debe tener al menos 6 caracteres");
+    return;
+  }
+
   try {
     const userData = {
       user: form.value.user,
@@ -48,19 +56,19 @@ const registroUser = async () => {
       programa_favorito: form.value.programa_favorito
     };
 
-    console.log('Datos del usuario en formato JSON:', userData);
-
     const response = await registro(userData);
 
     if (response && response.status === 201) {
-      console.log(response.data.message);
-      router.push("/inicio")
+      swallTrue("¡Registro exitoso! Ya puedes iniciar sesión.");
+      router.push("/inicio");
     } else {
-      console.log("No se obtuvo una respuesta de éxito.");
+      swallError(response.data.message || "Error al registrar usuario");
     }
 
   } catch (error) {
     console.error("Error en el registro:", error);
+    const mensaje = error.response?.data?.message || "Error al conectar con el servidor";
+    swallError(mensaje);
   }
 };
 
@@ -107,6 +115,7 @@ const registroUser = async () => {
   display: flex;
   align-items: center;
   overflow-y: auto;
+  background-color: transparent !important; 
 }
 
 

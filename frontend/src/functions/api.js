@@ -210,3 +210,23 @@ export async function TraerRanking() {
     throw error;
   }
 }
+
+export async function reaccionar(data) {
+  try {
+    const response = await axios.post("/api/reaccionar", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error al reaccionar:", error);
+    throw error;
+  }
+}
+
+export async function TraerReacciones(id_publicacion) {
+  try {
+    const response = await axios.get(`/api/reacciones/${id_publicacion}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener reacciones:", error);
+    return { total: 0 };
+  }
+}

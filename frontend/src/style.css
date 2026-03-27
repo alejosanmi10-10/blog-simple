@@ -8,11 +8,17 @@ html, body, #app {
 }
 
 html {
-  background-color: #00ffff; /* Bright Cyan Base */
-  background-image: url('../public/fondo_cn_personajes.png');
+  background-color: white;
+  background-image: url('/fondo-original.jpg') !important;
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
+}
+body, #app, .vista, .contenedor {
+  background: transparent !important;
+}
+body, #app, .vista, .contenedor {
+  background: transparent !important;
 }
 h1,button{
   font-family: "League Spartan", sans-serif;
