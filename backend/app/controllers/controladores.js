@@ -54,7 +54,7 @@ async function login(req, res) {
                 };
 
                 res.cookie("jwt", token, cookieOption);
-                res.send({ status: "ok", message: "Usuario loggeado", token,"usuario":results});
+                res.send({ status: "ok", message: "Usuario loggeado", token, "usuario": results });
             });
         });
     } catch (error) {
@@ -96,16 +96,16 @@ async function register(req, res) {
             const salt = await bcryptjs.genSalt(5); 
             const hashContraseña = await bcryptjs.hash(password, salt);
             const fechaCreacion = new Date().toISOString().split('T')[0];
+            const rol = 'usuario'; // Rol por defecto según estándar CORE
 
-            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad, programa_favorito) VALUES (?, ?, ?, ?, ?, ?)";
-            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion, ciudad, programa_favorito], (insertError, insertResults, insertFields) => {
+            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad, programa_favorito, rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion, ciudad, programa_favorito, rol], (insertError, insertResults, insertFields) => {
                 if (insertError) {
                     console.error("Error al registrar al usuario:", insertError);
-                    return res.status(500).send({ status: "Error", message: "Error interno del servidor" });
+                    return res.status(500).send({ status: "Error", message: "Error interno del servidor o usuario duplicado" });
                 }
 
-             
-                res.status(201).send({ status: "ok", message: `Usuario ${user} agregado` });
+                res.status(201).send({ status: "ok", message: `Usuario ${user} agregado con éxito` });
             });
         });
     } catch (error) {

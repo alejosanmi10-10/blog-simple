@@ -51,8 +51,8 @@
 import Comentario from './Comentario.vue';
 import { swallInput } from '../functions/alerts';
 import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones } from '../functions/api';
-import { onMounted } from 'vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useUserStore } from '../stores/userStore';
 
 
 export default {
@@ -62,7 +62,7 @@ export default {
   name: 'Publicacion',
   props: {
   creador: String,
-  fecha: Date,
+  fecha: String,
   titulo: String,
   categoria: String,
   texto: String,
@@ -71,9 +71,8 @@ export default {
   setup(props, { emit }) {
 
     const comentarios = ref([])
-    const data = JSON.parse(localStorage.getItem("userData"))
-    console.log(data)
-    const id_usuario = data.id
+    const userStore = useUserStore();
+    const id_usuario = userStore.user?.id || 0;
 
     const agregarMensaje = async () => {
       const confirmacion = await swallInput();

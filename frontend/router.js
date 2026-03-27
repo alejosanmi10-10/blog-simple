@@ -33,4 +33,17 @@ const router = createRouter({
   routes,
 });
 
+// NAVIGATION GUARDS (Requisito CORE)
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/', '/registro', '/inicio'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('userData');
+
+  if (authRequired && !loggedIn) {
+    return next('/inicio');
+  }
+
+  next();
+});
+
 export default router;

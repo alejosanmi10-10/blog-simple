@@ -1,7 +1,30 @@
-//FUNCIONES PARA MANEJO DE BACKEND
 import { swallTrue, swallError, swallConfirmation } from "./alerts";
 import axios from "axios";
 import Cookies from "js-cookie";
+
+// CONFIGURACIÓN AXIOS CORE
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.withCredentials = true;
+
+// INTERCEPTORES AXIOS (Requisito CORE)
+axios.interceptors.request.use(config => {
+  const token = Cookies.get('jwt');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+axios.interceptors.response.use(response => response, error => {
+  if (error.response?.status === 401) {
+    // Redirigir al login si el token expira
+    localStorage.removeItem('userData');
+    window.location.href = '/inicio';
+  }
+  return Promise.reject(error);
+});
 
 export async function login(data) {
   try {
@@ -16,6 +39,7 @@ export async function login(data) {
           userName: response.data.usuario[0].user,
           ciudad: response.data.usuario[0].ciudad,
           email: response.data.usuario[0].email,
+          rol: response.data.usuario[0].rol, // Requisito CORE
         })
       );
 
@@ -65,23 +89,18 @@ export async function Imprimir(endpoint) {
 }
 
 export function formatearFecha(fecha) {
-  const fechaObj = new Date(fecha);
-  const opciones = {
-    dia: "numeric",
-    mes: "short",
-    año: "numeric",
-    hora: "numeric",
-    minuto: "numeric",
-  };
+  try {
+    const fechaObj = new Date(fecha);
+    if (isNaN(fechaObj.getTime())) return "Fecha desconocida";
+    
+    const dia = fechaObj.getDate().toString().padStart(2, "0");
+    const mes = fechaObj.toLocaleString("es-ES", { month: "short" });
+    const año = fechaObj.getFullYear();
 
-  const fechaFormateada = `${fechaObj
-    .getDate()
-    .toString()
-    .padStart(2, "0")} ${fechaObj.toLocaleString("es-ES", {
-    month: "short",
-  })} ${fechaObj.getFullYear()}`;
-
-  return fechaFormateada;
+    return `${dia} ${mes} ${año}`;
+  } catch (e) {
+    return "Fecha desconocida";
+  }
 }
 
 export async function crearPost(data) {

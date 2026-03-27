@@ -7,9 +7,17 @@ import cors from 'cors';
 const app = express();
 const port = 3000;
 
+// CONFIGURACIÓN DE CORS MULTI-PUERTO (Requisito CORE para flexibilidad)
+const dominiosPermitidos = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'];
 
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: function (origin, callback) {
+    if (!origin || dominiosPermitidos.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
   credentials: true 
 })); 
 
@@ -47,7 +55,7 @@ app.get('/api/usuarios', (req, res) => {
       return res.status(500).json(err);
     }
     return res.status(200).json(result);
-  });
+  });
 });
 
 app.get("/api/comentarios/:id", autenthication.imprimirComentarios);
@@ -67,3 +75,13 @@ app.get('/api/ranking', (req, res) => {
 app.post("/api/reaccionar", verificarAuth, autenthication.reaccionar);
 app.get("/api/reacciones/:id_publicacion", autenthication.obtenerReacciones);
 
+
+// MIDDLEWARE GLOBAL DE ERRORES (Requisito CORE)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: "Error",
+    message: "Ha ocurrido un error inesperado en el servidor",
+    error: process.env.NODE_ENV === 'development' ? err.message : {}
+  });
+});

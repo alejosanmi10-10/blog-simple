@@ -28,6 +28,9 @@
         <input id="busqueda" type="text" class="campo_busqueda" v-model="textoBusqueda">
       </div>
       <div class="listaPublicaciones">
+        <div v-if="publicacionesFiltradas.length === 0" style="color: white; background: black; padding: 20px; border: 4px solid #ffff00; font-size: 1.5rem; font-family: 'League Spartan'; font-weight: 900;">
+          {{ publicaciones.length === 0 ? 'Cargando contenido...' : 'No se encontraron publicaciones que coincidan.' }}
+        </div>
         <Publicacion v-for="publicacion in publicacionesFiltradas" :key="publicacion.id" :creador="publicacion.usuario"
           :fecha="publicacion.fecha" :titulo="publicacion.titulo" :categoria="publicacion.categoria"
           :texto="publicacion.texto" :id="publicacion.id" @ver-detalle="abrirDetalle" />
@@ -78,13 +81,16 @@ export default {
 
     //FILTRA POR TITULO O POR CONTENIDO DE TEXTO
     const publicacionesFiltradas = computed(() => {
+      console.log("Filtrando publicaciones:", publicaciones.value.length);
       if (!textoBusqueda.value) return publicaciones.value;
       const busqueda = textoBusqueda.value.toLowerCase();
-      return publicaciones.value.filter(publicacion =>
-        publicacion.titulo.toLowerCase().includes(busqueda) ||
-        publicacion.categoria.toLowerCase().includes(busqueda) ||
-        publicacion.texto.toLowerCase().includes(busqueda)
+      const filtradas = publicaciones.value.filter(publicacion =>
+        (publicacion.titulo || "").toLowerCase().includes(busqueda) ||
+        (publicacion.categoria || "").toLowerCase().includes(busqueda) ||
+        (publicacion.texto || "").toLowerCase().includes(busqueda)
       );
+      console.log("Resultados del filtro:", filtradas.length);
+      return filtradas;
     });
 
     async function ImprimirPublicaciones() {
@@ -296,9 +302,11 @@ export default {
 
 @media (min-width: 992px) {
   .listaPublicaciones {
-    height: 75vh;
+    height: 80vh;
     overflow-y: auto;
     padding: 0 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ffff00 black;
   }
 }
 
