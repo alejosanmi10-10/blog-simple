@@ -65,7 +65,7 @@ async function login(req, res) {
 
 async function register(req, res) {
     try {
-        const { user,email,password,ciudad,programa_favorito } = req.body;
+        const { user,email,password,ciudad,programa_favorito, icono_perfil } = req.body;
 
        
         if (!user || !password || !email || !ciudad || !programa_favorito) {
@@ -97,9 +97,10 @@ async function register(req, res) {
             const hashContraseña = await bcryptjs.hash(password, salt);
             const fechaCreacion = new Date().toISOString().split('T')[0];
             const rol = 'usuario'; // Rol por defecto según estándar CORE
+            const iconoFinal = icono_perfil ? icono_perfil : "finn";
 
-            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad, programa_favorito, rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion, ciudad, programa_favorito, rol], (insertError, insertResults, insertFields) => {
+            const insertQuery = "INSERT INTO users (user, email, password, dc, ciudad, programa_favorito, rol, icono_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            connection.query(insertQuery, [user, email, hashContraseña, fechaCreacion, ciudad, programa_favorito, rol, iconoFinal], (insertError, insertResults, insertFields) => {
                 if (insertError) {
                     console.error("Error al registrar al usuario:", insertError);
                     return res.status(500).send({ status: "Error", message: "Error interno del servidor o usuario duplicado" });
@@ -166,6 +167,8 @@ function imprimirPublicaciones(callback) {
   const sql = `SELECT 
     p.id,
     u.user AS usuario,
+    u.icono_perfil,
+    u.programa_favorito,
     p.titulo,
     p.fecha,
     p.categoria,
@@ -261,7 +264,7 @@ function eliminarPublicacion(req, res) {
   }
 
 function imprimirUsuarios(callback) {
-    const sql = `SELECT U.user, U.ciudad, U.programa_favorito FROM users U`;
+    const sql = `SELECT U.id, U.user, U.ciudad, U.programa_favorito, U.icono_perfil FROM users U`;
   
     connection.query(sql, (err, result) => {
       if (err) {
@@ -287,6 +290,8 @@ function imprimirUsuarios(callback) {
           SELECT 
               c.id,
               u.user AS usuario, 
+              u.icono_perfil,
+              u.programa_favorito,
               c.id_publicacion,
               c.comentario,
               c.fecha
@@ -446,6 +451,41 @@ function obtenerReacciones(req, res) {
   });
 }
 
+function obtenerUsuariosReacciones(req, res) {
+  const { id_publicacion } = req.params;
+  const sql = `
+    SELECT u.user as usuario 
+    FROM reacciones r
+    INNER JOIN users u ON r.id_usuario = u.id
+    WHERE r.id_publicacion = ?
+  `;
+  connection.query(sql, [id_publicacion], (err, results) => {
+    if (err) {
+      console.error("Error al obtener usuarios que reaccionaron:", err);
+      return res.status(500).send({ status: "Error", message: "Error en la base de datos" });
+    }
+    // Devolvemos un array de strings (nombres de usuarios)
+    const usuarios = results.map(row => row.usuario);
+    res.send({ status: "ok", usuarios });
+  });
+}
+
+async function actualizarAvatar(req, res) {
+  const { id_usuario, icono_perfil } = req.body;
+  if (!id_usuario || !icono_perfil) {
+    return res.status(400).send({ status: "Error", message: "Faltan datos para actualizar el avatar" });
+  }
+
+  const query = "UPDATE users SET icono_perfil = ? WHERE id = ?";
+  connection.query(query, [icono_perfil, id_usuario], (err, result) => {
+    if (err) {
+      console.error("Error al actualizar avatar:", err);
+      return res.status(500).send({ status: "Error", message: "Error interno del servidor al actualizar avatar" });
+    }
+    res.status(200).send({ status: "ok", message: "Avatar actualizado", icono_perfil });
+  });
+}
+
 /* EXPORTACIÓN DE MÉTODOS */
 export const methods = {
 login,
@@ -461,6 +501,8 @@ crearComentario,
 eliminarComentario,
 imprimirRanking,
 reaccionar,
-obtenerReacciones
+obtenerReacciones,
+obtenerUsuariosReacciones,
+actualizarAvatar
 
 }

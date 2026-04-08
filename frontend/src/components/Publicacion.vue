@@ -2,15 +2,13 @@
   <div class="contenedor_publicacion scale-up-center" @click="emitirDetalle" style="cursor: pointer;">
     <div style="display: flex; justify-content: space-between;">
       <div style="display: flex; gap: 1rem; align-items: center; justify-content: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512" style="color: black;">
-          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
-            d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96" />
-          <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"
-            d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304Z" />
-        </svg>
-        <h3 style="font-weight: 900; font-size: 1.5rem; font-family: 'League Spartan', sans-serif;">{{ creador }}</h3>
+        <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" style="width: 3.5rem; height: 3.5rem; border-radius: 50%; border: 3px solid black; object-fit: cover; object-position: top center; box-shadow: 4px 4px 0px black;">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+          <h3 style="margin: 0; font-weight: 900; font-size: 1.5rem; font-family: 'League Spartan', sans-serif;">{{ creador }}</h3>
+          <p v-if="programa" style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #ff00ff; text-transform: uppercase;">▶ {{ programa }}</p>
+        </div>
       </div>
-      <h3 style="background: black; color: white; padding: 5px 10px; font-family: monospace;">{{ fecha }}</h3>
+      <h3 style="background: black; color: white; padding: 5px 10px; font-family: monospace; height: fit-content;">{{ fecha }}</h3>
     </div>
     <div class="contenido_publicacion">
       <div class="contenedor_titulo">
@@ -31,6 +29,9 @@
             </svg>
             <span class="total_reacciones">{{ totalReacciones }}</span>
           </div>
+          <div v-if="creador === nombreUsuarioLogueado" class="ver_usuarios_btn scale-up-center" @click.stop="toggleUsuariosReacciones">
+            👀 Ver Reacciones
+          </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" class="icono_comentar"
             @click.stop="agregarMensaje">
             <path fill="currentColor"
@@ -38,9 +39,17 @@
           </svg>
         </div>
 
+        <div v-if="mostrarUsuarios" class="lista_usuarios_reacciones neo-brutal-popover scale-up-center" @click.stop>
+          <h4>Usuarios que reaccionaron:</h4>
+          <ul v-if="usuariosQueReaccionaron.length > 0">
+            <li v-for="(user, idx) in usuariosQueReaccionaron" :key="idx">{{ user }}</li>
+          </ul>
+          <p v-else style="font-weight: bold; margin:0;">Nadie ha reaccionado aún.</p>
+        </div>
+
       <div class="contenedor_comentarios">
-        <Comentario v-for="comentario in comentarios" :usuario="comentario.usuario" :fecha="comentario.fecha"
-          :comentario="comentario.comentario" ssss :capturar="() => EliminarComentario(comentario.id)"
+        <Comentario v-for="comentario in comentarios" :key="comentario.id" :usuario="comentario.usuario" :icono="comentario.icono_perfil" :programa="comentario.programa_favorito" :fecha="comentario.fecha"
+          :comentario="comentario.comentario" :capturar="() => EliminarComentario(comentario.id)"
           :id="comentario.id" />
       </div>
     </div>
@@ -50,7 +59,7 @@
 <script>
 import Comentario from './Comentario.vue';
 import { swallInput } from '../functions/alerts';
-import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones } from '../functions/api';
+import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones, TraerUsuariosReacciones } from '../functions/api';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
@@ -62,6 +71,8 @@ export default {
   name: 'Publicacion',
   props: {
   creador: String,
+  icono: String,
+  programa: String,
   fecha: String,
   titulo: String,
   categoria: String,
@@ -73,6 +84,18 @@ export default {
     const comentarios = ref([])
     const userStore = useUserStore();
     const id_usuario = userStore.user?.id || 0;
+    const nombreUsuarioLogueado = userStore.user?.userName || "";
+
+    const mostrarUsuarios = ref(false);
+    const usuariosQueReaccionaron = ref([]);
+
+    const toggleUsuariosReacciones = async () => {
+      mostrarUsuarios.value = !mostrarUsuarios.value;
+      if (mostrarUsuarios.value) {
+        const res = await TraerUsuariosReacciones(props.id);
+        usuariosQueReaccionaron.value = res.usuarios || [];
+      }
+    };
 
     const agregarMensaje = async () => {
       const confirmacion = await swallInput();
@@ -94,6 +117,8 @@ export default {
     const emitirDetalle = () => {
       emit('ver-detalle', {
         creador: props.creador,
+        icono: props.icono,
+        programa: props.programa,
         fecha: props.fecha,
         titulo: props.titulo,
         categoria: props.categoria,
@@ -158,7 +183,11 @@ export default {
       emitirDetalle,
       totalReacciones,
       haReaccionado,
-      toggleLike
+      toggleLike,
+      nombreUsuarioLogueado,
+      mostrarUsuarios,
+      usuariosQueReaccionaron,
+      toggleUsuariosReacciones
     };
   }
 }
@@ -243,6 +272,56 @@ export default {
   font-weight: 900;
   font-family: 'League Spartan', sans-serif;
   font-size: 1.2rem;
+}
+
+.ver_usuarios_btn {
+  background-color: #00ffff;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px black;
+  padding: 0.3rem 0.8rem;
+  font-weight: 900;
+  font-family: 'League Spartan', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.ver_usuarios_btn:hover {
+  background-color: #ff00ff;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px black;
+  color: white;
+}
+
+.neo-brutal-popover {
+  margin-top: 1rem;
+  background-color: #ffeb3b;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px black;
+  padding: 1rem;
+  font-family: 'League Spartan', sans-serif;
+  width: fit-content;
+}
+
+.neo-brutal-popover h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  border-bottom: 3px solid black;
+  padding-bottom: 0.2rem;
+}
+
+.neo-brutal-popover ul {
+  list-style-type: square;
+  padding-left: 1.5rem;
+  margin: 0;
+}
+
+.neo-brutal-popover li {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
 }
 
 .contenedor_comentarios {

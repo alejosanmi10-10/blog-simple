@@ -2,33 +2,55 @@
   <div class="contenedorP_perfil">
     <div class="contenedor_perfil">
       <div class="informacion_perfil">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15em" height="15em" viewBox="0 0 24 24" style="color: orange;">
-          <path fill="currentColor"
-            d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2m0 18.5a8.5 8.5 0 1 1 .001-17.001A8.5 8.5 0 0 1 12 20.5m0-8c-3.038 0-5.5 1.728-5.5 3.5s2.462 3.5 5.5 3.5s5.5-1.728 5.5-3.5s-2.462-3.5-5.5-3.5m0-.5a3 3 0 1 0 0-6a3 3 0 0 0 0 6" />
-        </svg>
-        <h1 class="nombre ">{{ informacion.userName }}</h1>
-        <section style="display: flex; gap: 1rem; align-items: center; justify-content: center; color: white;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-            <path fill="currentColor"
-              d="M5 5h13a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3m0 1c-.5 0-.94.17-1.28.47l7.78 5.03l7.78-5.03C18.94 6.17 18.5 6 18 6zm6.5 6.71L3.13 7.28C3.05 7.5 3 7.75 3 8v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V8c0-.25-.05-.5-.13-.72z" />
-          </svg>
-          <h2>{{ informacion.email }}</h2>
-        </section>
-        <section style="display: flex; gap: 1rem; align-items: center; justify-content: center; color: white;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-            <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
-              <path
-                d="M9.74 15.876a.75.75 0 0 1-.616.864a17.15 17.15 0 0 0-6.707 2.666a.75.75 0 0 1-.834-1.247a18.65 18.65 0 0 1 7.293-2.899a.75.75 0 0 1 .864.616m4.52 0a.75.75 0 0 1 .864-.616a18.65 18.65 0 0 1 7.293 2.899a.75.75 0 0 1-.834 1.247a17.15 17.15 0 0 0-6.707-2.666a.75.75 0 0 1-.616-.864" />
-              <path
-                d="M6.25 10a5.75 5.75 0 1 1 11.5 0c0 2.742-1.364 5.153-2.655 6.832a18.6 18.6 0 0 1-2.387 2.552a10 10 0 0 1-.22.185l-.013.012l-.004.003h-.002c0 .001 0 .002-.469-.584l-.43.614l-.003-.002l-.004-.003l-.015-.01l-.049-.036l-.175-.132a13 13 0 0 1-.602-.502a15.4 15.4 0 0 1-1.808-1.898C7.604 15.394 6.25 12.983 6.25 10M12 19l-.43.614a.75.75 0 0 0 .899-.028zm-.026-.973q.13-.118.286-.27a17 17 0 0 0 1.646-1.84c1.208-1.57 2.344-3.659 2.344-5.917a4.25 4.25 0 0 0-8.5 0c0 2.517 1.145 4.606 2.336 6.094a14 14 0 0 0 1.888 1.933M12 8.75a1.25 1.25 0 1 0 0 2.5a1.25 1.25 0 0 0 0-2.5M9.25 10a2.75 2.75 0 1 1 5.5 0a2.75 2.75 0 0 1-5.5 0" />
-            </g>
-          </svg>
-          <h3>{{ informacion.ciudad }}</h3>
-        </section>
+        <div style="position: relative; display: inline-block;">
+          <img :src="'/avatars/' + (informacion.icono_perfil || 'finn') + '.png'" alt="Avatar" style="width: 15rem; height: 15rem; border-radius: 50%; border: 6px solid black; box-shadow: 10px 10px 0px black; object-fit: cover; object-position: top center; margin-bottom: 1rem; background-color: white;">
+          <button class="btn_editar_avatar" @click="mostrarDropdownAvatar = !mostrarDropdownAvatar">✎</button>
+          
+          <div class="dropdown_avatar_perfil" v-if="mostrarDropdownAvatar">
+            <h4 style="margin: 0 0 0.5rem 0; color: black; font-family: 'League Spartan', sans-serif;">Elige un Avatar</h4>
+            <div class="grid_avatar_perfil">
+              <div v-for="personaje in listaPersonajes" :key="personaje.id" 
+                   :class="['opcion_avatar', personaje.id === informacion.icono_perfil ? 'activo' : '']"
+                   @click="cambiarAvatar(personaje.id)">
+                <img :src="'/avatars/' + personaje.id + '.png'" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="nombre">{{ informacion.userName }}</h1>
+        <div class="perfil_datos_box">
+          <section class="perfil_dato_item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M5 5h13a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3m0 1c-.5 0-.94.17-1.28.47l7.78 5.03l7.78-5.03C18.94 6.17 18.5 6 18 6zm6.5 6.71L3.13 7.28C3.05 7.5 3 7.75 3 8v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V8c0-.25-.05-.5-.13-.72z" />
+            </svg>
+            <h2>{{ informacion.email }}</h2>
+          </section>
+          <section class="perfil_dato_item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+              <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                <path
+                  d="M9.74 15.876a.75.75 0 0 1-.616.864a17.15 17.15 0 0 0-6.707 2.666a.75.75 0 0 1-.834-1.247a18.65 18.65 0 0 1 7.293-2.899a.75.75 0 0 1 .864.616m4.52 0a.75.75 0 0 1 .864-.616a18.65 18.65 0 0 1 7.293 2.899a.75.75 0 0 1-.834 1.247a17.15 17.15 0 0 0-6.707-2.666a.75.75 0 0 1-.616-.864" />
+                <path
+                  d="M6.25 10a5.75 5.75 0 1 1 11.5 0c0 2.742-1.364 5.153-2.655 6.832a18.6 18.6 0 0 1-2.387 2.552a10 10 0 0 1-.22.185l-.013.012l-.004.003h-.002c0 .001 0 .002-.469-.584l-.43.614l-.003-.002l-.004-.003l-.015-.01l-.049-.036l-.175-.132a13 13 0 0 1-.602-.502a15.4 15.4 0 0 1-1.808-1.898C7.604 15.394 6.25 12.983 6.25 10M12 19l-.43.614a.75.75 0 0 0 .899-.028zm-.026-.973q.13-.118.286-.27a17 17 0 0 0 1.646-1.84c1.208-1.57 2.344-3.659 2.344-5.917a4.25 4.25 0 0 0-8.5 0c0 2.517 1.145 4.606 2.336 6.094a14 14 0 0 0 1.888 1.933M12 8.75a1.25 1.25 0 1 0 0 2.5a1.25 1.25 0 0 0 0-2.5M9.25 10a2.75 2.75 0 1 1 5.5 0a2.75 2.75 0 0 1-5.5 0" />
+              </g>
+            </svg>
+            <h3>{{ informacion.ciudad }}</h3>
+          </section>
+          <section v-if="informacion.programa_favorito" class="perfil_dato_item" style="color: #ff00ff;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M21 6h-7.59l2.3-2.29c.39-.39.39-1.02 0-1.41a.996.996 0 0 0-1.41 0L12 4.59L9.71 2.3a.996.996 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 14H3V8h18zM9 10v8l7-4z" />
+            </svg>
+            <h3>{{ informacion.programa_favorito }}</h3>
+          </section>
+        </div>
       </div>
     </div>
     <div class="contenedorPrincipal">
-      <h1 style="text-align: center; color: white;">PUBLICACIONES</h1>
+      <div class="header_publicaciones">
+        <h1>PUBLICACIONES</h1>
+      </div>
       <div class="contenedor_publicaciones">
         <Card v-for="publicacion in publicacionesFiltradas" :titulo="publicacion.titulo"
           :descripcion="publicacion.categoria" :id="publicacion.id" :capturar="() => capturar(publicacion.id)"
@@ -40,8 +62,8 @@
 </template>
 <script>
 import { onMounted, ref, computed } from 'vue';
-import { Imprimir, deletePost, editPost } from '../../functions/api';
-import { swallEditForm } from '../../functions/alerts';
+import { Imprimir, deletePost, editPost, actualizarAvatarReq } from '../../functions/api';
+import { swallEditForm, swallTrue, swallError } from '../../functions/alerts';
 import Card from '../../components/Card.vue';
 
 export default {
@@ -51,7 +73,43 @@ export default {
   setup() {
     const informacion = ref(JSON.parse(localStorage.getItem("userData")) || {});
     const publicaciones = ref([]);
+    const mostrarDropdownAvatar = ref(false);
     
+    const listaPersonajes = [
+      { id: 'finn', nombre: 'Finn' },
+      { id: 'dexter', nombre: 'Dexter' },
+      { id: 'coraje', nombre: 'Coraje' },
+      { id: 'rigby', nombre: 'Rigby' },
+      { id: 'ben', nombre: 'Ben 10' },
+      { id: 'bombon', nombre: 'Bombón' },
+      { id: 'gumball', nombre: 'Gumball' },
+      { id: 'darwin', nombre: 'Darwin' },
+      { id: 'dann', nombre: 'Danny' },
+      { id: 'gwen', nombre: 'Gwen' }
+    ];
+
+    const cambiarAvatar = async (nuevo_id) => {
+      try {
+        const id_usuario = informacion.value.id;
+        await actualizarAvatarReq(id_usuario, nuevo_id);
+        
+        informacion.value.icono_perfil = nuevo_id;
+        
+        let userDataStr = localStorage.getItem("userData");
+        if (userDataStr) {
+          let userData = JSON.parse(userDataStr);
+          userData.icono_perfil = nuevo_id;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          window.dispatchEvent(new Event('storage'));
+        }
+        
+        swallTrue("Avatar actualizado");
+        mostrarDropdownAvatar.value = false;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
 
     const publicacionesFiltradas = computed(() => {
       if (!informacion.value.userName) return publicaciones.value;
@@ -106,7 +164,10 @@ export default {
       informacion,
       publicacionesFiltradas,
       capturar,
-      editar
+      editar,
+      mostrarDropdownAvatar,
+      listaPersonajes,
+      cambiarAvatar
     };
   }
 };
@@ -139,7 +200,39 @@ export default {
   background-color: rgb(1, 1, 1);
   padding: 1rem;
   color: white;
+  border: 4px solid #ffff00;
+  box-shadow: 6px 6px 0px black;
+  font-family: 'League Spartan', sans-serif;
   text-transform: uppercase;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.perfil_datos_box {
+  background-color: white;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px black;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-radius: 1rem;
+}
+
+.perfil_dato_item {
+  display: flex; 
+  gap: 1rem; 
+  align-items: center; 
+  justify-content: flex-start; 
+  color: black;
+}
+
+.perfil_dato_item h2, .perfil_dato_item h3 {
+  margin: 0;
+  font-weight: bold;
+  font-family: 'League Spartan', sans-serif;
+  /* text-transform: uppercase; */
+  font-size: 1.3rem;
 }
 
 .contenedorPrincipal {
@@ -163,5 +256,101 @@ export default {
 
 .contenedor_publicaciones::-webkit-scrollbar {
   display: none;
+}
+
+.header_publicaciones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  z-index: 10;
+  position: relative;
+}
+
+.header_publicaciones h1 {
+  background-color: #00ffff;
+  color: black;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px black;
+  padding: 1rem 2rem;
+  font-family: 'League Spartan', sans-serif;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.btn_editar_avatar {
+  position: absolute;
+  bottom: 2rem;
+  right: -1rem;
+  background-color: rgb(255, 182, 25);
+  border: 4px solid black;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px black;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.btn_editar_avatar:hover {
+  transform: scale(1.1);
+  background-color: #00ffff;
+}
+
+.dropdown_avatar_perfil {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -10px);
+  background-color: white;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px black;
+  border-radius: 1rem;
+  padding: 1rem;
+  z-index: 100;
+  width: 15rem;
+}
+
+.grid_avatar_perfil {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.opcion_avatar {
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  background-color: #eee;
+  transition: all 0.2s;
+}
+
+.opcion_avatar:hover {
+  background-color: #ccc;
+  transform: scale(1.1);
+}
+
+.opcion_avatar.activo {
+  border: 3px solid black;
+  background-color: #00ffff;
+  box-shadow: 3px 3px 0px black;
+}
+
+.opcion_avatar img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 2px solid black;
 }
 </style>

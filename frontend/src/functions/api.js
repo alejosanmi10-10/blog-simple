@@ -39,7 +39,9 @@ export async function login(data) {
           userName: response.data.usuario[0].user,
           ciudad: response.data.usuario[0].ciudad,
           email: response.data.usuario[0].email,
-          rol: response.data.usuario[0].rol, // Requisito CORE
+          rol: response.data.usuario[0].rol,
+          icono_perfil: response.data.usuario[0].icono_perfil,
+          programa_favorito: response.data.usuario[0].programa_favorito
         })
       );
 
@@ -247,5 +249,26 @@ export async function TraerReacciones(id_publicacion) {
   } catch (error) {
     console.error("Error al obtener reacciones:", error);
     return { total: 0 };
+  }
+}
+
+export async function TraerUsuariosReacciones(id_publicacion) {
+  try {
+    const response = await axios.get(`/api/reacciones_usuarios/${id_publicacion}`);
+    return response.data; // Debería tener { status: "ok", usuarios: [...] }
+  } catch (error) {
+    console.error("Error al obtener usuarios que reaccionaron:", error);
+    return { usuarios: [] };
+  }
+}
+
+export async function actualizarAvatarReq(id_usuario, icono_perfil) {
+  try {
+    const response = await axios.put("/api/usuarios/avatar", { id_usuario, icono_perfil });
+    return response;
+  } catch (error) {
+    console.error("Error al actualizar avatar:", error);
+    swallError(error.response?.data?.message || "Error al actualizar avatar");
+    throw error;
   }
 }

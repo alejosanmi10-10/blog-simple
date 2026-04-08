@@ -1,10 +1,7 @@
 <template>
   
   <div class="contenedor_persona">
-    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 32 32" class="figura">
-      <path fill="currentColor"
-        d="M18 30h-4a2 2 0 0 1-2-2v-7a2 2 0 0 1-2-2v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2m-5-18a.94.94 0 0 0-1 1v6h2v9h4v-9h2v-6a.94.94 0 0 0-1-1zm3-3a4 4 0 1 1 4-4a4 4 0 0 1-4 4m0-6a2 2 0 1 0 2 2a2 2 0 0 0-2-2" />
-    </svg>
+    <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" class="figura" style="border-radius: 50%; width: 3em; height: 3em; object-fit: cover; object-position: top center; border: 2px solid black;">
     <div class="info_personas">
       <h3 style="font-weight: bold; ">{{ nombre }}</h3>
 
@@ -39,6 +36,11 @@ export default {
     nombre: {
       type: String,
       required: true
+    },
+    icono: {
+      type: String,
+      required: false,
+      default: 'finn'
     },
     ubicacion: {
       type: String,

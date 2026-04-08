@@ -52,45 +52,59 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgb(255, 255, 255);
-    border-radius: 1rem;
+    background-color: white;
+    border: 4px solid black;
+    border-radius: 0;
+    box-shadow: 8px 8px 0px black;
     align-items: center;
     justify-content: center;
-    height: 50%;
-    transition: background-color 0.4s ease;
-    transition: color 0.3s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
     height: 15rem;
     padding: 2rem;
 }
 
 .des {
-    background-color: orange;
-    border-radius: 2rem;
-    padding: 1rem 2rem;
+    background-color: #ffff00;
+    color: black;
+    border: 3px solid black;
+    box-shadow: 4px 4px 0px black;
+    border-radius: 0;
+    padding: 0.5rem 1.5rem;
+    font-weight: 900;
+    font-family: 'League Spartan', sans-serif;
+    text-transform: uppercase;
 }
 
 .card:hover {
-    backdrop-filter: blur(30px);
-    color: rgb(255, 255, 255);
-    animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px black;
 }
 
 .botones {
-    color: white;
+    color: black;
+    background-color: #ff00ff;
+    border: 3px solid black;
+    box-shadow: 4px 4px 0px black;
+    padding: 5px;
+    width: 2.5em;
+    height: 2.5em;
+    transition: all 0.2s;
+    cursor: pointer;
 }
 
 .botones:hover {
-    color: rgb(231, 134, 6);
+    background-color: #00ffff;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px black;
 }
 
 .titulo_card {
-
-    padding: 1rem;
+    padding: 0.5rem;
     text-align: center;
     font-size: 1.5rem;
     line-height: 2rem;
-    color: white;
+    color: black;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 900;
 }
 </style>

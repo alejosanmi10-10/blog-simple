@@ -5,7 +5,7 @@
         <h1 class="titulo">Personas</h1>
         <hr class="separator">
         <div class="listaUsuarios">
-          <Personas v-for="usuario in usuarios" :key="usuario.id" :nombre="usuario.user" :ubicacion="usuario.ciudad" :programa="usuario.programa_favorito" />
+          <Personas v-for="usuario in usuarios" :key="usuario.id" :icono="usuario.icono_perfil" :nombre="usuario.user" :ubicacion="usuario.ciudad" :programa="usuario.programa_favorito" @click="filtrarPorUsuario(usuario.user)" style="cursor: pointer;" />
         </div>
       </div>
 
@@ -20,6 +20,11 @@
     </div>
 
     <div class="contenedor_vistaP">
+      <div v-if="usuarioFiltro" style="width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; background: #00ffff; border: 4px solid black; padding: 10px 20px; box-shadow: 6px 6px 0px black; margin-bottom: 0px; margin-top: 20px;">
+        <h2 style="margin: 0; font-family: 'League Spartan', sans-serif; text-transform: uppercase; color: black; font-size: 1.5rem;">▶ Viendo posts de: {{ usuarioFiltro }}</h2>
+        <button @click="limpiarFiltroUsuario" style="background: #ff00ff; color: white; border: 3px solid black; padding: 5px 15px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px black; transition: all 0.2s;">VER TODOS</button>
+      </div>
+
       <div class="busqueda">
         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 32 32">
           <path fill="currentColor"
@@ -32,7 +37,7 @@
           {{ publicaciones.length === 0 ? 'Cargando contenido...' : 'No se encontraron publicaciones que coincidan.' }}
         </div>
         <Publicacion v-for="publicacion in publicacionesFiltradas" :key="publicacion.id" :creador="publicacion.usuario"
-          :fecha="publicacion.fecha" :titulo="publicacion.titulo" :categoria="publicacion.categoria"
+          :icono="publicacion.icono_perfil" :programa="publicacion.programa_favorito" :fecha="publicacion.fecha" :titulo="publicacion.titulo" :categoria="publicacion.categoria"
           :texto="publicacion.texto" :id="publicacion.id" @ver-detalle="abrirDetalle" />
       </div>
     </div>
@@ -44,6 +49,8 @@
           <button class="boton_cerrar_modal" @click="cerrarDetalle">X</button>
           <Publicacion 
             :creador="postSeleccionado.creador"
+            :icono="postSeleccionado.icono"
+            :programa="postSeleccionado.programa"
             :fecha="postSeleccionado.fecha" 
             :titulo="postSeleccionado.titulo" 
             :categoria="postSeleccionado.categoria"
@@ -76,22 +83,38 @@ export default {
     const usuarios = ref([]);
     const ranking = ref([]);
     const textoBusqueda = ref("");
+    const usuarioFiltro = ref(null);
     const mostrarDetalle = ref(false);
     const postSeleccionado = ref(null);
 
-    //FILTRA POR TITULO O POR CONTENIDO DE TEXTO
+    //FILTRA POR TITULO, CONTENIDO O USUARIO SELECCIONADO
     const publicacionesFiltradas = computed(() => {
-      console.log("Filtrando publicaciones:", publicaciones.value.length);
-      if (!textoBusqueda.value) return publicaciones.value;
-      const busqueda = textoBusqueda.value.toLowerCase();
-      const filtradas = publicaciones.value.filter(publicacion =>
-        (publicacion.titulo || "").toLowerCase().includes(busqueda) ||
-        (publicacion.categoria || "").toLowerCase().includes(busqueda) ||
-        (publicacion.texto || "").toLowerCase().includes(busqueda)
-      );
-      console.log("Resultados del filtro:", filtradas.length);
-      return filtradas;
+      let resultado = publicaciones.value;
+
+      if (usuarioFiltro.value) {
+        resultado = resultado.filter(p => p.usuario === usuarioFiltro.value);
+      }
+
+      if (textoBusqueda.value) {
+        const busqueda = textoBusqueda.value.toLowerCase();
+        resultado = resultado.filter(publicacion =>
+          (publicacion.titulo || "").toLowerCase().includes(busqueda) ||
+          (publicacion.categoria || "").toLowerCase().includes(busqueda) ||
+          (publicacion.texto || "").toLowerCase().includes(busqueda)
+        );
+      }
+      return resultado;
     });
+
+    const filtrarPorUsuario = (user) => {
+      usuarioFiltro.value = user;
+      textoBusqueda.value = "";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const limpiarFiltroUsuario = () => {
+      usuarioFiltro.value = null;
+    };
 
     async function ImprimirPublicaciones() {
       try {
@@ -149,6 +172,8 @@ export default {
       if (post) {
         abrirDetalle({
           creador: post.usuario,
+          icono: post.icono_perfil,
+          programa: post.programa_favorito,
           fecha: post.fecha,
           titulo: post.titulo,
           categoria: post.categoria,
@@ -162,13 +187,16 @@ export default {
       publicaciones,
       usuarios,
       textoBusqueda,
+      usuarioFiltro,
       publicacionesFiltradas,
       ranking,
       mostrarDetalle,
       postSeleccionado,
       abrirDetalle,
       cerrarDetalle,
-      abrirDetalleDesdeRanking
+      abrirDetalleDesdeRanking,
+      filtrarPorUsuario,
+      limpiarFiltroUsuario
     };
   }
 }

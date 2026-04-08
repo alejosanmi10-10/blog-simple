@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 const port = 3000;
 
-// CONFIGURACIÓN DE CORS MULTI-PUERTO (Requisito CORE para flexibilidad)
+// CONFIGURACIÓN DE CORS MULTI-PUERTO 
 const dominiosPermitidos = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'];
 
 app.use(cors({
@@ -74,6 +74,8 @@ app.get('/api/ranking', (req, res) => {
 
 app.post("/api/reaccionar", verificarAuth, autenthication.reaccionar);
 app.get("/api/reacciones/:id_publicacion", autenthication.obtenerReacciones);
+app.get("/api/reacciones_usuarios/:id_publicacion", autenthication.obtenerUsuariosReacciones);
+app.put("/api/usuarios/avatar", verificarAuth, autenthication.actualizarAvatar);
 
 
 // MIDDLEWARE GLOBAL DE ERRORES (Requisito CORE)

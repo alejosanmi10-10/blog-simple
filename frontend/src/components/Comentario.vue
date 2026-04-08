@@ -1,17 +1,14 @@
 <template>
   <div class="contain_comentario">
-    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24" class="icono_comentario">
-      <path fill="currentColor"
-        d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493q.075.074.17.12a10.23 10.23 0 0 0 11.95 0a.8.8 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.28 10.28 0 0 0-5.998-1.934zm0 3.76a4.16 4.16 0 0 1 3.878 2.534a4.14 4.14 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.15 4.15 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.75 8.75 0 0 1-9.245 0a8 8 0 0 1-1.212-.9a7.1 7.1 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.1 7.1 0 0 1 2.143 2q-.563.506-1.212.9" />
-    </svg>
-    <div class="info_comentario">
-      <div style="display: flex;">
-        <p style="font-weight: bold;">{{ usuario }} </p>
-        <p style="margin-left: 10px;">- {{ fecha }}</p>
+    <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" class="icono_comentario" style="border-radius: 50%; width: 3em; height: 3em; object-fit: cover; object-position: top center; border: 2px solid black; background: white;">
+      <div class="info_comentario" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+        <div style="display: flex; align-items: baseline;">
+          <p style="font-weight: bold; margin: 0; font-family: 'League Spartan', sans-serif; font-size: 1.2rem;">{{ usuario }}</p>
+          <p style="margin-left: 10px; margin-bottom: 0; font-size: 0.8rem; opacity: 0.7;">{{ fecha }}</p>
+        </div>
+        <p v-if="programa" style="margin: 0; font-size: 0.75rem; font-weight: bold; color: #ff00ff; text-transform: uppercase;">▶ {{ programa }}</p>
+        <p style="margin: 0.5rem 0 0 0; font-family: Arial, sans-serif;">{{ comentario }}</p>
       </div>
-      <p>{{ comentario }}</p>
-
-    </div>
     <svg v-if="usuario == this.nombre" xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24"
       class="icono_eliminar" @click="capturar(id)">
       <path fill="currentColor"
@@ -24,6 +21,8 @@ export default {
   name: 'Comentario',
   props: {
     usuario: String,
+    icono: String,
+    programa: String,
     fecha: Date,
     comentario: String,
     capturar: Function,
