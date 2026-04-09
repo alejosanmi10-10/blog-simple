@@ -8,7 +8,11 @@
           <p v-if="programa" style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #ff00ff; text-transform: uppercase;">▶ {{ programa }}</p>
         </div>
       </div>
-      <h3 style="background: black; color: white; padding: 5px 10px; font-family: monospace; height: fit-content;">{{ fecha }}</h3>
+      <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+        <button v-if="creador === nombreUsuarioLogueado" @click.stop="manejarEditar" title="Editar Publicación" style="background: yellow; border: 3px solid black; cursor: pointer; padding: 5px; box-shadow: 3px 3px 0px black;">✏️</button>
+        <button v-if="creador === nombreUsuarioLogueado" @click.stop="manejarEliminar" title="Eliminar Publicación" style="background: red; color: white; border: 3px solid black; cursor: pointer; padding: 5px; box-shadow: 3px 3px 0px black;">🗑️</button>
+        <h3 style="background: black; color: white; padding: 5px 10px; font-family: monospace; height: fit-content; margin: 0;">{{ fecha }}</h3>
+      </div>
     </div>
     <div class="contenido_publicacion">
       <div class="contenedor_titulo">
@@ -18,10 +22,15 @@
 
       <hr style="border: none; border-bottom: 4px dashed black; width: 100%; margin: 20px 0;">
 
+      <img v-if="imagen_url" :src="imagen_url" alt="Imagen de Publicación" style="width: 100%; max-height: 500px; object-fit: cover; border: 4px solid black; box-shadow: 8px 8px 0px black; margin-bottom: 1rem;">
+
       <p style="padding-top:1rem; text-align: justify; width: 100%; font-size: 1.1rem; line-height: 1.6; font-family: Arial, sans-serif;">
         {{ texto }}
       </p>
         <div style="display: flex; gap: 1rem; align-items: center;">
+          <button class="conteo_reacciones" @click.stop="toggleEstrella" style="background: white; border: 3px solid black; padding: 0.3rem 0.8rem; cursor: pointer; box-shadow: 4px 4px 0px black; font-size: 1.2rem;">
+            {{ esFavorito ? '⭐ Favorito' : '✩ Guardar' }}
+          </button>
           <div class="conteo_reacciones" @click.stop="toggleLike">
             <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" 
               :style="{ color: haReaccionado ? '#ff0000' : 'black' }">
@@ -59,7 +68,7 @@
 <script>
 import Comentario from './Comentario.vue';
 import { swallInput } from '../functions/alerts';
-import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones, TraerUsuariosReacciones } from '../functions/api';
+import { TraerComentarios, crearComentario, deleteComentario, formatearFecha, reaccionar, TraerReacciones, TraerUsuariosReacciones, deletePost, editPost, toggleFavorito, obtenerFavoritos } from '../functions/api';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
@@ -77,6 +86,7 @@ export default {
   titulo: String,
   categoria: String,
   texto: String,
+  imagen_url: String,
   id: Number,
 },
   setup(props, { emit }) {
@@ -123,8 +133,35 @@ export default {
         titulo: props.titulo,
         categoria: props.categoria,
         texto: props.texto,
+        imagen_url: props.imagen_url,
         id: props.id
       });
+    };
+
+    const manejarEliminar = async () => {
+      try {
+        await deletePost(props.id);
+        emit('post-eliminado', props.id); // Avisa al padre para refrescar lista
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const manejarEditar = async () => {
+      const nuevoTitulo = prompt("Edita el título:", props.titulo);
+      if (!nuevoTitulo) return;
+      const nuevaCategoria = prompt("Edita la categoría:", props.categoria);
+      if (!nuevaCategoria) return;
+      const nuevoTexto = prompt("Edita el texto:", props.texto);
+      if (!nuevoTexto) return;
+      const nuevaImagen = prompt("Enlace de imagen (opcional):", props.imagen_url || "");
+
+      try {
+        await editPost(props.id, { titulo: nuevoTitulo, categoria: nuevaCategoria, texto: nuevoTexto, imagen_url: nuevaImagen });
+        emit('post-editado', props.id);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     async function ImprimirComentarios(valor) {
@@ -153,6 +190,29 @@ export default {
 
     const totalReacciones = ref(0);
     const haReaccionado = ref(false);
+    const esFavorito = ref(false);
+
+    const toggleEstrella = async () => {
+      try {
+        const res = await toggleFavorito({ id_usuario, id_publicacion: props.id });
+        if (res.status === "ok") {
+          esFavorito.value = (res.accion === "puesto");
+        }
+      } catch (error) {
+        console.error("Error al guardar favorito:", error);
+      }
+    };
+
+    const chequearFavoritoInicial = async () => {
+      try {
+        const res = await obtenerFavoritos(id_usuario);
+        if (res && res.favoritos) {
+          esFavorito.value = res.favoritos.some(fav => fav.id === props.id);
+        }
+      } catch (error) {
+        console.error("Error al chequear fav:", error);
+      }
+    };
 
     const toggleLike = async () => {
       try {
@@ -174,6 +234,7 @@ export default {
     onMounted(async () => {
       await ImprimirComentarios(props.id);
       await actualizarReacciones();
+      await chequearFavoritoInicial();
     });
 
     return {
@@ -184,10 +245,14 @@ export default {
       totalReacciones,
       haReaccionado,
       toggleLike,
+      esFavorito,
+      toggleEstrella,
       nombreUsuarioLogueado,
       mostrarUsuarios,
       usuariosQueReaccionaron,
-      toggleUsuariosReacciones
+      toggleUsuariosReacciones,
+      manejarEliminar,
+      manejarEditar
     };
   }
 }

@@ -17,6 +17,9 @@
   </div>
 </template>
 <script>
+import { computed } from 'vue';
+import { useUserStore } from '../stores/userStore';
+
 export default {
   name: 'Comentario',
   props: {
@@ -30,11 +33,11 @@ export default {
   },
 
   setup() {
-    const data = JSON.parse(localStorage.getItem("userData"))
-
-
-
-    const nombre = data.userName
+    const userStore = useUserStore();
+    
+    // Uso PRO de Pinia: Obtenemos el nombre del usuario logueado reactivamente
+    const nombre = computed(() => userStore.user?.userName);
+    
     return {
       nombre
     }
@@ -77,7 +80,7 @@ export default {
   display: flex;
   flex-direction: column;
   color: black;
-  line-height: 0;
+  line-height: normal;
   padding: 0;
   margin: 0;
 }

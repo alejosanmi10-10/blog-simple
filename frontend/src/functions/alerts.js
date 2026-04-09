@@ -2,19 +2,29 @@ import Swal from "sweetalert2";
 
 export const swallTrue = (mensaje) => {
   return Swal.fire({
-    title: "¡Éxito!",
-    text: mensaje,
+    toast: true,
+    position: 'top-end',
+    title: mensaje,
     icon: "success",
-    confirmButtonText: "Aceptar",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    background: '#00ffff',
+    color: 'black'
   });
 };
 
 export const swallError = (mensaje) => {
   return Swal.fire({
-    title: "¡Error!",
-    text: mensaje,
+    toast: true,
+    position: 'top-end',
+    title: mensaje,
     icon: "error",
-    confirmButtonText: "Aceptar",
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    background: '#ff00ff',
+    color: 'white'
   });
 };
 

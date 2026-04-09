@@ -42,6 +42,8 @@
 import axios from 'axios';
 import { swallConfirmation, swallTrue, swallError } from "../functions/alerts.js";
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../stores/userStore';
+import { computed } from 'vue';
 
 export default {
   name: 'Header',
@@ -53,7 +55,10 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const nombre = JSON.parse(localStorage.getItem('userData'));
+    const userStore = useUserStore();
+    
+    // Uso PRO de Pinia: Obtenemos el usuario de forma reactiva
+    const nombre = computed(() => userStore.user || {});
 
     const logout = async () => {
       const confirmacion = await swallConfirmation("¿Seguro que desea cerrar sesión?");
@@ -62,9 +67,11 @@ export default {
           const response = await axios.get('/api/logout', { withCredentials: true });
 
           if (response && response.data && response.data.message) {
-            console.log(response.data.message);
             swallTrue(response.data.message);
-            localStorage.removeItem('userData');
+            
+            // Uso PRO de Pinia: Limpiamos el store global
+            userStore.clearUser();
+            
             router.push("/");
           } else {
             console.error('Mensaje de respuesta no disponible');

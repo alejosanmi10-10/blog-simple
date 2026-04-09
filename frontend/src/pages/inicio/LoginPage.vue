@@ -25,8 +25,10 @@
 import { ref } from 'vue';
 import { login } from '../../functions/api';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../../stores/userStore';
 
 const router = useRouter();
+const userStore = useUserStore();
 
 const form = ref({
   email: '',
@@ -35,19 +37,23 @@ const form = ref({
 
 const iniciarSesion = async () => {
   try {
-    const userData = {
-      email: form.value.email,
-      password: form.value.password,
-    };
-
-    console.log('Datos del usuario en formato JSON:', userData);
-
-    const response = await login(userData);
-    console.log(response);
-
-
-    if (response) {
-      console.log('Respuesta del servidor:', response);
+    const response = await login(form.value);
+    
+    if (response && response.status === 200) {
+      
+      // Uso PRO de Pinia: Seteamos el usuario en el store global
+      const infoUsuario = {
+        id: response.data.usuario[0].id,
+        userName: response.data.usuario[0].user,
+        ciudad: response.data.usuario[0].ciudad,
+        email: response.data.usuario[0].email,
+        rol: response.data.usuario[0].rol,
+        icono_perfil: response.data.usuario[0].icono_perfil,
+        programa_favorito: response.data.usuario[0].programa_favorito
+      };
+      
+      userStore.setUser(infoUsuario);
+      
       router.push("/dashboard/banner");
     } else {
       console.error('Error en la respuesta del servidor');

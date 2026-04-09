@@ -49,31 +49,46 @@
     </div>
     <div class="contenedorPrincipal">
       <div class="header_publicaciones">
-        <h1>PUBLICACIONES</h1>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+          <h1 @click="tabActiva = 'misPosts'" :style="{ background: tabActiva === 'misPosts' ? '#00ffff' : 'white', cursor: 'pointer' }" style="color: black; border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">MIS PUBLICACIONES</h1>
+          <h1 @click="tabActiva = 'favoritos'" :style="{ background: tabActiva === 'favoritos' ? '#ff00ff' : 'white', color: tabActiva === 'favoritos' ? 'white' : 'black', cursor: 'pointer' }" style="border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">FAVORITOS ⭐</h1>
+        </div>
       </div>
-      <div class="contenedor_publicaciones">
+      <div v-if="tabActiva === 'misPosts'" class="contenedor_publicaciones">
+        <h3 v-if="publicacionesFiltradas.length === 0" style="color: black; font-family: 'League Spartan'; font-size: 1.5rem;">No tienes publicaciones aún.</h3>
         <Card v-for="publicacion in publicacionesFiltradas" :titulo="publicacion.titulo"
           :descripcion="publicacion.categoria" :id="publicacion.id" :capturar="() => capturar(publicacion.id)"
           :editar="() => editar(publicacion.id)" />
+      </div>
 
+      <div v-if="tabActiva === 'favoritos'" class="contenedor_publicaciones">
+        <h3 v-if="publicacionesFavoritas.length === 0" style="color: black; font-family: 'League Spartan'; font-size: 1.5rem;">Aún no has guardado ninguna publicación.</h3>
+        <Card v-for="publicacion in publicacionesFavoritas" :key="'fav'+publicacion.id" :titulo="publicacion.titulo"
+          :descripcion="publicacion.categoria" :id="publicacion.id" :mostrarBotones="false" />
       </div>
     </div>
   </div>
 </template>
 <script>
 import { onMounted, ref, computed } from 'vue';
-import { Imprimir, deletePost, editPost, actualizarAvatarReq } from '../../functions/api';
+import { Imprimir, deletePost, editPost, actualizarAvatarReq, obtenerFavoritos, logoutReq } from '../../functions/api';
 import { swallEditForm, swallTrue, swallError } from '../../functions/alerts';
 import Card from '../../components/Card.vue';
+import { useUserStore } from '../../stores/userStore';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
     Card
   },
   setup() {
-    const informacion = ref(JSON.parse(localStorage.getItem("userData")) || {});
+    const userStore = useUserStore();
+    const router = useRouter();
+    const informacion = computed(() => userStore.user || {});
     const publicaciones = ref([]);
+    const publicacionesFavoritas = ref([]);
     const mostrarDropdownAvatar = ref(false);
+    const tabActiva = ref('misPosts');
     
     const listaPersonajes = [
       { id: 'finn', nombre: 'Finn' },
@@ -93,15 +108,9 @@ export default {
         const id_usuario = informacion.value.id;
         await actualizarAvatarReq(id_usuario, nuevo_id);
         
-        informacion.value.icono_perfil = nuevo_id;
-        
-        let userDataStr = localStorage.getItem("userData");
-        if (userDataStr) {
-          let userData = JSON.parse(userDataStr);
-          userData.icono_perfil = nuevo_id;
-          localStorage.setItem("userData", JSON.stringify(userData));
-          window.dispatchEvent(new Event('storage'));
-        }
+        // Uso PRO de Pinia: Actualizamos el estado global
+        const nuevoUserData = { ...userStore.user, icono_perfil: nuevo_id };
+        userStore.setUser(nuevoUserData);
         
         swallTrue("Avatar actualizado");
         mostrarDropdownAvatar.value = false;
@@ -110,6 +119,21 @@ export default {
       }
     };
 
+    const logout = async () => {
+      try {
+        const response = await logoutReq();
+        if (response && response.data && response.data.message) {
+          swallTrue(response.data.message);
+          userStore.clearUser();
+          router.push("/");
+        } else {
+          swallError('Error al cerrar sesión');
+        }
+      } catch (error) {
+        console.error(error);
+        swallError('Error al cerrar sesión');
+      }
+    };
 
     const publicacionesFiltradas = computed(() => {
       if (!informacion.value.userName) return publicaciones.value;
@@ -156,13 +180,26 @@ export default {
       }
     }
 
+    async function cargarFavoritos() {
+      try {
+        const id_usuario = informacion.value.id;
+        const res = await obtenerFavoritos(id_usuario);
+        publicacionesFavoritas.value = res.favoritos || [];
+      } catch (error) {
+        console.error("Error fetching favoritos:", error);
+      }
+    }
+
     onMounted(() => {
       ImprimirPublicaciones();
+      cargarFavoritos();
     });
 
     return {
       informacion,
       publicacionesFiltradas,
+      publicacionesFavoritas,
+      tabActiva,
       capturar,
       editar,
       mostrarDropdownAvatar,

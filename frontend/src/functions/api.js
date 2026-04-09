@@ -1,6 +1,7 @@
 import { swallTrue, swallError, swallConfirmation } from "./alerts";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useUserStore } from "../stores/userStore";
 
 // CONFIGURACIÓN AXIOS CORE
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -19,8 +20,13 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(response => response, error => {
   if (error.response?.status === 401) {
-    // Redirigir al login si el token expira
-    localStorage.removeItem('userData');
+    // Uso PRO de Pinia: Limpiamos el store global
+    try {
+        const userStore = useUserStore();
+        userStore.clearUser();
+    } catch (e) {
+        localStorage.removeItem('userData');
+    }
     window.location.href = '/inicio';
   }
   return Promise.reject(error);
@@ -30,23 +36,7 @@ export async function login(data) {
   try {
     const response = await axios.post("/api/login", data);
     if (response.status === 200) {
-      console.log(response);
-
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          id: response.data.usuario[0].id,
-          userName: response.data.usuario[0].user,
-          ciudad: response.data.usuario[0].ciudad,
-          email: response.data.usuario[0].email,
-          rol: response.data.usuario[0].rol,
-          icono_perfil: response.data.usuario[0].icono_perfil,
-          programa_favorito: response.data.usuario[0].programa_favorito
-        })
-      );
-
       swallTrue(`Bienvenid@: ${response.data.usuario[0].user}`);
-
       return response;
     } else {
       console.log(response.data);
@@ -271,4 +261,28 @@ export async function actualizarAvatarReq(id_usuario, icono_perfil) {
     swallError(error.response?.data?.message || "Error al actualizar avatar");
     throw error;
   }
+}
+
+export async function toggleFavorito(data) {
+  try {
+    const response = await axios.post("/api/favoritos", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error al toggle favorito:", error);
+    throw error;
+  }
+}
+
+export async function obtenerFavoritos(id_usuario) {
+  try {
+    const response = await axios.get(`/api/favoritos/${id_usuario}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener favoritos:", error);
+    return { favoritos: [] };
+  }
+}
+
+export async function logoutReq() {
+  return await axios.get('/api/logout');
 }

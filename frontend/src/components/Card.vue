@@ -2,7 +2,7 @@
     <div class="card ">
         <h1 style="text-transform: capitalize; " class=" titulo_card ">{{ titulo }}</h1>
         <h3 class="des">{{ descripcion }}</h3>
-        <div style="display: flex; gap: 1rem">
+        <div v-if="mostrarBotones" style="display: flex; gap: 1rem">
             <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24" class="botones"
                 @click="capturar(id)">
                 <path fill="currentColor"
@@ -31,7 +31,11 @@ export default {
         descripcion: String,
         id: Number,
         capturar: Function,
-        editar: Function
+        editar: Function,
+        mostrarBotones: {
+            type: Boolean,
+            default: true
+        }
     }
 
 };

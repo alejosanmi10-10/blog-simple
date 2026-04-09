@@ -1,19 +1,26 @@
-
 //importaciones
 import bcryptjs from "bcryptjs"; 
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
 import connection from "./db.js";
 import { response } from 'express';
+import { z } from "zod";
 dotenv.config();
 
 
 async function login(req, res) {
-  const { email,password } = req.body;
-  
-    if (!email || !password) {
-        return res.status(400).send({ status: "Error", message: "Los campos están incompletos" });
+    const loginSchema = z.object({
+        email: z.string().email("Debe ser un email válido"),
+        password: z.string().min(8, "La contraseña debe tener mínimo 8 caracteres")
+    });
+
+    const validacion = loginSchema.safeParse(req.body);
+
+    if (!validacion.success) {
+        return res.status(400).send({ status: "Error", message: validacion.error.errors[0].message });
     }
+
+    const { email, password } = validacion.data;
 
     try {
         const query = 'SELECT * FROM users WHERE email = ?';
@@ -42,7 +49,7 @@ async function login(req, res) {
                 }
 
                 const token = jsonwebtoken.sign(
-                    { user: usuarioRevisar.nombre },
+                    { id: usuarioRevisar.id, user: usuarioRevisar.user, rol: usuarioRevisar.rol },
                     process.env.JWT_SECRET,
                     { expiresIn: process.env.JWT_EXPIRATION }
                 );
@@ -65,21 +72,22 @@ async function login(req, res) {
 
 async function register(req, res) {
     try {
-        const { user,email,password,ciudad,programa_favorito, icono_perfil } = req.body;
+        const registerSchema = z.object({
+            user: z.string().min(3, "El nombre de usuario debe ser mayor a 3 letras"),
+            email: z.string().email("Formato de email inválido"),
+            password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
+            ciudad: z.string().min(2, "Debes incluir tu ciudad"),
+            programa_favorito: z.string().min(2, "Debes seleccionar un programa favorito"),
+            icono_perfil: z.string().optional()
+        });
 
-       
-        if (!user || !password || !email || !ciudad || !programa_favorito) {
-            return res.status(400).send({ status: "Error", message: "Los campos están incompletos" });
+        const validacion = registerSchema.safeParse(req.body);
+
+        if (!validacion.success) {
+            return res.status(400).send({ status: "Error", message: validacion.error.errors[0].message });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).send({ status: "Error", message: "Formato de email inválido" });
-        }
-
-        if (password.length < 8) {
-            return res.status(400).send({ status: "Error", message: "La contraseña debe tener al menos 8 caracteres" });
-        }
+        const { user, email, password, ciudad, programa_favorito, icono_perfil } = validacion.data;
 
        
         const query = "SELECT * FROM users WHERE user = ?";
@@ -125,7 +133,7 @@ async function logout(req, res = response) {
 }
 
 function crearPublicacion(req, res, next) {
-    const { id_usuario, titulo, categoria, texto } = req.body;
+    const { id_usuario, titulo, categoria, texto, imagen_url } = req.body;
   
 
     if (!id_usuario || !titulo || !categoria || !texto) {
@@ -148,9 +156,9 @@ function crearPublicacion(req, res, next) {
         return res.status(400).send({ status: "Error", message: "La publicación ya existe" });
       }
   
-      const sqlInsert = `INSERT INTO publicaciones (id_usuario, titulo, fecha, categoria, texto) 
-                         VALUES (?, ?, DATE(NOW()), ?, ?)`;
-      connection.query(sqlInsert, [id_usuario, titulo, categoria, texto], (err, result) => {
+      const sqlInsert = `INSERT INTO publicaciones (id_usuario, titulo, fecha, categoria, texto, imagen_url) 
+                         VALUES (?, ?, DATE(NOW()), ?, ?, ?)`;
+      connection.query(sqlInsert, [id_usuario, titulo, categoria, texto, imagen_url || null], (err, result) => {
         if (err) {
           console.error("Error al crear la publicación:", err);
           return res.status(500).send({ message: "Error al crear la publicación" });
@@ -172,11 +180,13 @@ function imprimirPublicaciones(callback) {
     p.titulo,
     p.fecha,
     p.categoria,
-    p.texto
+    p.texto,
+    p.imagen_url
   FROM 
     publicaciones p
   INNER JOIN 
-    users u ON p.id_usuario = u.id;`;
+    users u ON p.id_usuario = u.id
+  ORDER BY p.id DESC;`;
 
   connection.query(sql, (err, result) => {
     if (err) {
@@ -230,9 +240,7 @@ function eliminarPublicacion(req, res) {
   function editarPublicacion(req, res) {
     try {
       const { id } = req.params;
-      const { titulo, texto, categoria } = req.body;
-      console.log(id);
-      console.log(titulo, texto, categoria);
+      const { titulo, texto, categoria, imagen_url } = req.body;
   
       const query = "SELECT * FROM publicaciones WHERE titulo = ?";
       connection.query(query, [titulo], (error, resultado) => {
@@ -240,15 +248,13 @@ function eliminarPublicacion(req, res) {
           console.error("Error de verificación:", error);
           return res.status(500).send({ status: "Error", message: "Error en la base de datos" });
         }
-  
-       
+   
         if (resultado.length > 0 && resultado[0].id !== parseInt(id)) {
           return res.status(400).send({ message: 'Título ya existe' });
         }
-  
-    
-        const sql = `UPDATE publicaciones SET titulo = ?, texto = ?, categoria = ? WHERE id = ?`;
-        connection.query(sql, [titulo, texto, categoria, id], (error, result) => {
+   
+        const sql = `UPDATE publicaciones SET titulo = ?, texto = ?, categoria = ?, imagen_url = ? WHERE id = ?`;
+        connection.query(sql, [titulo, texto, categoria, imagen_url || null, id], (error, result) => {
           if (error) {
             console.error("Error al actualizar publicación:", error);
             return res.status(500).send({ status: "Error", message: "Error en la base de datos" });
@@ -486,6 +492,47 @@ async function actualizarAvatar(req, res) {
   });
 }
 
+function toggleFavorito(req, res) {
+  const { id_usuario, id_publicacion } = req.body;
+
+  if (!id_usuario || !id_publicacion) {
+    return res.status(400).send({ status: "Error", message: "Datos incompletos" });
+  }
+
+  const checkQuery = "SELECT * FROM favoritos WHERE id_usuario = ? AND id_publicacion = ?";
+  connection.query(checkQuery, [id_usuario, id_publicacion], (error, results) => {
+    if (error) {
+      return res.status(500).send({ status: "Error", message: "Error comprobando favoritos" });
+    }
+
+    if (results.length > 0) {
+      const deleteQuery = "DELETE FROM favoritos WHERE id_usuario = ? AND id_publicacion = ?";
+      connection.query(deleteQuery, [id_usuario, id_publicacion], () => {
+        res.send({ status: "ok", message: "Eliminado de favoritos", accion: "quitado" });
+      });
+    } else {
+      const insertQuery = "INSERT INTO favoritos (id_usuario, id_publicacion) VALUES (?, ?)";
+      connection.query(insertQuery, [id_usuario, id_publicacion], () => {
+        res.send({ status: "ok", message: "Añadido a favoritos", accion: "puesto" });
+      });
+    }
+  });
+}
+
+function obtenerFavoritos(req, res) {
+  const { id_usuario } = req.params;
+  const sql = `
+    SELECT p.*, f.id as favorito_id 
+    FROM favoritos f
+    INNER JOIN publicaciones p ON f.id_publicacion = p.id
+    WHERE f.id_usuario = ?
+  `;
+  connection.query(sql, [id_usuario], (err, results) => {
+    if (err) return res.status(500).send(err);
+    res.send({ status: "ok", favoritos: results });
+  });
+}
+
 /* EXPORTACIÓN DE MÉTODOS */
 export const methods = {
 login,
@@ -503,6 +550,8 @@ imprimirRanking,
 reaccionar,
 obtenerReacciones,
 obtenerUsuariosReacciones,
-actualizarAvatar
+actualizarAvatar,
+toggleFavorito,
+obtenerFavoritos
 
 }
