@@ -2,7 +2,7 @@
   <div class="contenedorP_perfil">
     <div class="contenedor_perfil">
       <div class="informacion_perfil">
-        <div style="position: relative; display: inline-block;">
+        <div style="position: relative; display: inline-block;" ref="dropdownAvatarRef">
           <img :src="'/avatars/' + (informacion.icono_perfil || 'finn') + '.png'" alt="Avatar" style="width: 15rem; height: 15rem; border-radius: 50%; border: 6px solid black; box-shadow: 10px 10px 0px black; object-fit: cover; object-position: top center; margin-bottom: 1rem; background-color: white;">
           <button class="btn_editar_avatar" @click="mostrarDropdownAvatar = !mostrarDropdownAvatar">✎</button>
           
@@ -37,7 +37,7 @@
             </svg>
             <h3>{{ informacion.ciudad }}</h3>
           </section>
-          <section v-if="informacion.programa_favorito" class="perfil_dato_item" style="color: #ff00ff;">
+          <section v-if="informacion.programa_favorito" class="perfil_dato_item" style="color: #DC143C;">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
               <path fill="currentColor"
                 d="M21 6h-7.59l2.3-2.29c.39-.39.39-1.02 0-1.41a.996.996 0 0 0-1.41 0L12 4.59L9.71 2.3a.996.996 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 14H3V8h18zM9 10v8l7-4z" />
@@ -50,8 +50,8 @@
     <div class="contenedorPrincipal">
       <div class="header_publicaciones">
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-          <h1 @click="tabActiva = 'misPosts'" :style="{ background: tabActiva === 'misPosts' ? '#00ffff' : 'white', cursor: 'pointer' }" style="color: black; border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">MIS PUBLICACIONES</h1>
-          <h1 @click="tabActiva = 'favoritos'" :style="{ background: tabActiva === 'favoritos' ? '#ff00ff' : 'white', color: tabActiva === 'favoritos' ? 'white' : 'black', cursor: 'pointer' }" style="border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">FAVORITOS ⭐</h1>
+          <h1 @click="tabActiva = 'misPosts'" :style="{ background: tabActiva === 'misPosts' ? '#FFFFFF' : 'white', cursor: 'pointer' }" style="color: black; border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">MIS PUBLICACIONES</h1>
+          <h1 @click="tabActiva = 'favoritos'" :style="{ background: tabActiva === 'favoritos' ? '#DC143C' : 'white', color: tabActiva === 'favoritos' ? 'white' : 'black', cursor: 'pointer' }" style="border: 4px solid black; box-shadow: 6px 6px 0px black; padding: 1rem 2rem; font-family: 'League Spartan', sans-serif; text-transform: uppercase; font-weight: 900; font-size: 2rem; margin: 0; transition: all 0.2s;">FAVORITOS ⭐</h1>
         </div>
       </div>
       <div v-if="tabActiva === 'misPosts'" class="contenedor_publicaciones">
@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, onUnmounted, ref, computed } from 'vue';
 import { Imprimir, deletePost, editPost, actualizarAvatarReq, obtenerFavoritos, logoutReq } from '../../functions/api';
 import { swallEditForm, swallTrue, swallError } from '../../functions/alerts';
 import Card from '../../components/Card.vue';
@@ -88,6 +88,7 @@ export default {
     const publicaciones = ref([]);
     const publicacionesFavoritas = ref([]);
     const mostrarDropdownAvatar = ref(false);
+    const dropdownAvatarRef = ref(null);
     const tabActiva = ref('misPosts');
     
     const listaPersonajes = [
@@ -190,9 +191,20 @@ export default {
       }
     }
 
+    const closeDropdown = (e) => {
+      if (dropdownAvatarRef.value && !dropdownAvatarRef.value.contains(e.target)) {
+        mostrarDropdownAvatar.value = false;
+      }
+    };
+
     onMounted(() => {
       ImprimirPublicaciones();
       cargarFavoritos();
+      document.addEventListener('click', closeDropdown);
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener('click', closeDropdown);
     });
 
     return {
@@ -203,6 +215,7 @@ export default {
       capturar,
       editar,
       mostrarDropdownAvatar,
+      dropdownAvatarRef,
       listaPersonajes,
       cambiarAvatar
     };
@@ -237,7 +250,7 @@ export default {
   background-color: rgb(1, 1, 1);
   padding: 1rem;
   color: white;
-  border: 4px solid #ffff00;
+  border: 4px solid #FFFFFF;
   box-shadow: 6px 6px 0px black;
   font-family: 'League Spartan', sans-serif;
   text-transform: uppercase;
@@ -305,7 +318,7 @@ export default {
 }
 
 .header_publicaciones h1 {
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   color: black;
   border: 4px solid black;
   box-shadow: 6px 6px 0px black;
@@ -339,7 +352,7 @@ export default {
 
 .btn_editar_avatar:hover {
   transform: scale(1.1);
-  background-color: #00ffff;
+  background-color: #FFFFFF;
 }
 
 .dropdown_avatar_perfil {
@@ -378,7 +391,7 @@ export default {
 
 .opcion_avatar.activo {
   border: 3px solid black;
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   box-shadow: 3px 3px 0px black;
 }
 
@@ -389,5 +402,46 @@ export default {
   object-fit: cover;
   object-position: top center;
   border: 2px solid black;
+}
+
+@media (max-width: 992px) {
+  .contenedorP_perfil {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 2rem;
+    width: 100%;
+  }
+  .informacion_perfil {
+    width: 100%;
+  }
+  .contenedor_publicaciones {
+    grid-template-columns: 1fr;
+    padding: 1rem 0;
+    height: auto;
+    width: 100%;
+  }
+  .nombre {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  .header_publicaciones h1 {
+    font-size: 1.3rem !important;
+    padding: 0.8rem 1rem !important;
+    text-align: center;
+    width: 100%;
+    margin: 0 !important;
+  }
+  .header_publicaciones > div {
+    flex-direction: column !important;
+    width: 100%;
+    gap: 0.5rem !important;
+  }
+  .contenedorPrincipal {
+    width: 100%;
+    padding: 0;
+  }
+  .perfil_datos_box {
+    padding: 1rem;
+  }
 }
 </style>

@@ -19,7 +19,7 @@
         <label>Programa Favorito:</label>
         <input type="text" v-model="form.programa_favorito" required placeholder="Ej: Hora de Aventura">
         <label>Elige tu Avatar:</label>
-        <div class="custom_dropdown" @click="dropdownAbierto = !dropdownAbierto">
+        <div class="custom_dropdown" @click="dropdownAbierto = !dropdownAbierto" ref="dropdownRef">
           <div class="dropdown_header">
             <img :src="'/avatars/' + form.icono_perfil + '.png'" alt="Seleccionado" class="avatar_circle">
             <span>{{ listaPersonajes.find(p => p.id === form.icono_perfil)?.nombre }}</span>
@@ -44,12 +44,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { registro } from '../../functions/api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const dropdownAbierto = ref(false);
+const dropdownRef = ref(null);
+
+const closeDropdown = (e) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
+    dropdownAbierto.value = false;
+  }
+};
+
+onMounted(() => document.addEventListener('click', closeDropdown));
+onUnmounted(() => document.removeEventListener('click', closeDropdown));
 
 const form = ref({
   user: '',
@@ -279,7 +289,7 @@ input {
 
 .avatar_opcion.seleccionado {
   border: 3px solid black;
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   box-shadow: 4px 4px 0px black;
   transform: translateY(-2px);
 }

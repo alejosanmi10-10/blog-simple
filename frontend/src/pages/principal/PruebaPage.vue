@@ -84,7 +84,7 @@ export default {
 
 .prueba-title {
   font-size: 4rem;
-  color: #ffff00;
+  color: #FFFFFF;
   -webkit-text-stroke: 2px black;
   text-shadow: 4px 4px 0px black;
   text-transform: uppercase;

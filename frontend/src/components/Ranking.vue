@@ -42,7 +42,7 @@ export default {
 .contenedor_ranking {
   display: flex;
   padding: 0.8rem 1.2rem;
-  background-color: #ff00ff; /* Magenta */
+  background-color: #E5E5E5;
   border: 4px solid black;
   box-shadow: 6px 6px 0px black;
   color: black;

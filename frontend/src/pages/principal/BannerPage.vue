@@ -21,7 +21,7 @@
 }
 
 .caja-cn {
-    background: #ff00ff; /* Magenta */
+    background: #DC143C; /* Magenta */
     padding: 3rem;
     color: black;
     text-align: center;
@@ -37,7 +37,7 @@
 
 .caja-cn h1 {
     font-size: 4rem;
-    color: #ffff00;
+    color: #FFFFFF;
     -webkit-text-stroke: 2px black;
     text-shadow: 4px 4px 0px black;
     margin-bottom: 1rem;
@@ -55,7 +55,7 @@
 .boton-empezar {
     display: inline-block;
     padding: 1rem 3rem;
-    background-color: #00ffff;
+    background-color: #FFFFFF;
     color: black;
     font-size: 1.8rem;
     font-weight: 900;
@@ -70,7 +70,7 @@
 .boton-empezar:hover {
     transform: translate(-4px, -4px);
     box-shadow: 12px 12px 0px black;
-    background-color: #ffff00;
+    background-color: #FFFFFF;
 }
 
 @media (max-width: 768px) {

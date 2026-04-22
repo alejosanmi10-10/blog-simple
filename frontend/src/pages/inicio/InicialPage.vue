@@ -116,13 +116,13 @@ header {
   padding: 4px 15px;
   text-transform: uppercase;
   font-family: 'League Spartan', sans-serif;
-  box-shadow: 4px 4px 0px #00ffff;
+  box-shadow: 4px 4px 0px #FFFFFF;
   margin-bottom: 0.5rem;
 }
 
 .main-title {
   font-size: 4rem;
-  color: #ff00ff;
+  color: #DC143C;
   font-weight: 900;
   font-family: 'League Spartan', sans-serif;
   line-height: 0.85;
@@ -133,7 +133,7 @@ header {
 }
 
 .highlight {
-  color: #ffff00;
+  color: #FFFFFF;
   font-size: 5rem;
   display: inline-block;
   transform: scale(1.05);
@@ -175,27 +175,27 @@ header {
 }
 
 .registro {
-  background-color: #ffff00;
+  background-color: #FFFFFF;
   color: black;
   box-shadow: 6px 6px 0px black;
 }
 
 .registro:hover {
-  background-color: #ff00ff;
+  background-color: #DC143C;
   color: white;
   transform: translate(-3px, -3px);
   box-shadow: 9px 9px 0px black;
 }
 
 .login {
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   color: black;
   box-shadow: 6px 6px 0px black;
 }
 
 .login:hover {
   background-color: black;
-  color: #00ffff;
+  color: #FFFFFF;
   transform: translate(-3px, -3px);
   box-shadow: 9px 9px 0px black;
 }

@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body, #app {
   margin: 0;
   padding: 0;
@@ -33,7 +37,7 @@ p{
 
 .poput {
   font-family: 'Arial', 'Helvetica', sans-serif;
-  background-color: #ff00ff; /* Magenta */
+  background-color: #DC143C; /* Magenta */
   color: #000;
   border: 4px solid #000;
   border-radius: 0;
@@ -43,7 +47,7 @@ p{
 }
 
 .titulo-swal {
-  background-color: #ffff00;
+  background-color: #FFFFFF;
   color: #000;
   width: 100vw;
   padding: 0.5rem;
@@ -65,7 +69,7 @@ p{
 }
 
 .my-custom-confirm-button-class {
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   color: #000;
   font-weight: 900;
   border: 4px solid #000;
@@ -76,7 +80,7 @@ p{
 }
 
 .my-custom-cancel-button-class {
-  background-color: #ff00ff;
+  background-color: #DC143C;
   color: #000;
   font-weight: 900;
   border: 4px solid #000;

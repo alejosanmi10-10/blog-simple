@@ -20,31 +20,22 @@
     </div>
 
     <div class="contenedor_vistaP">
-      <div v-if="usuarioFiltro" style="width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; background: #00ffff; border: 4px solid black; padding: 10px 20px; box-shadow: 6px 6px 0px black; margin-bottom: 0px; margin-top: 20px;">
+      <div v-if="usuarioFiltro" style="width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 4px solid black; padding: 10px 20px; box-shadow: 6px 6px 0px black; margin-bottom: 0px; margin-top: 20px;">
         <h2 style="margin: 0; font-family: 'League Spartan', sans-serif; text-transform: uppercase; color: black; font-size: 1.5rem;">▶ Viendo posts de: {{ usuarioFiltro }}</h2>
-        <button @click="limpiarFiltroUsuario" style="background: #ff00ff; color: white; border: 3px solid black; padding: 5px 15px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px black; transition: all 0.2s;">VER TODOS</button>
+        <button @click="limpiarFiltroUsuario" style="background: #DC143C; color: white; border: 3px solid black; padding: 5px 15px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px black; transition: all 0.2s;">VER TODOS</button>
       </div>
 
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: flex-start; max-width: 800px; width: 100%;">
-        <button v-for="serie in seriesPopulares" :key="serie" 
-          @click="textoBusqueda = serie"
-          style="background: white; border: 3px solid black; padding: 5px 15px; font-weight: 900; font-family: 'League Spartan'; cursor: pointer; box-shadow: 4px 4px 0px black; transition: all 0.2s;"
-          onmouseover="this.style.background='#00ffff'; this.style.transform='translate(-2px, -2px)';"
-          onmouseout="this.style.background='white'; this.style.transform='translate(0,0)';">
-          #{{ serie }}
-        </button>
-        <button @click="textoBusqueda = ''" style="background: black; color: white; border: 3px solid black; padding: 5px 15px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px black;">Limpiar Serie</button>
-      </div>
+
 
       <div class="busqueda" style="margin: 0 0 40px 0;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 32 32">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2.8em" height="2.8em" viewBox="0 0 32 32">
           <path fill="currentColor"
             d="M19.5 3C14.265 3 10 7.265 10 12.5c0 2.25.81 4.307 2.125 5.938L3.28 27.28l1.44 1.44l8.843-8.845C15.192 21.19 17.25 22 19.5 22c5.235 0 9.5-4.265 9.5-9.5S24.735 3 19.5 3m0 2c4.154 0 7.5 3.346 7.5 7.5S23.654 20 19.5 20S12 16.654 12 12.5S15.346 5 19.5 5" />
         </svg>
         <input id="busqueda" type="text" class="campo_busqueda" v-model="textoBusqueda" placeholder="Buscar título, texto o serie...">
       </div>
       <div class="listaPublicaciones">
-        <div v-if="publicacionesFiltradas.length === 0" style="color: white; background: black; padding: 20px; border: 4px solid #ffff00; font-size: 1.5rem; font-family: 'League Spartan'; font-weight: 900;">
+        <div v-if="publicacionesFiltradas.length === 0" style="color: white; background: black; padding: 20px; border: 4px solid #FFFFFF; font-size: 1.5rem; font-family: 'League Spartan'; font-weight: 900;">
           {{ publicaciones.length === 0 ? 'Cargando contenido...' : 'No se encontraron publicaciones que coincidan.' }}
         </div>
         <Publicacion v-for="publicacion in publicacionesPaginadas" :key="publicacion.id" :creador="publicacion.usuario"
@@ -53,9 +44,9 @@
           @post-eliminado="removerPostLocal" @post-editado="ImprimirPublicaciones" />
           
         <button v-if="limite < publicacionesFiltradas.length" @click="cargarMas" 
-          style="background: #ffff00; border: 4px solid black; padding: 10px 30px; font-weight: 900; font-size: 1.5rem; font-family: 'League Spartan'; cursor: pointer; box-shadow: 6px 6px 0px black; margin-top: 20px; transition: all 0.2s;"
-          onmouseover="this.style.background='#ff00ff'; this.style.color='white';"
-          onmouseout="this.style.background='#ffff00'; this.style.color='black';">
+          style="background: #FFFFFF; border: 4px solid black; padding: 10px 30px; font-weight: 900; font-size: 1.5rem; font-family: 'League Spartan'; cursor: pointer; box-shadow: 6px 6px 0px black; margin-top: 20px; transition: all 0.2s;"
+          onmouseover="this.style.background='#DC143C'; this.style.color='white';"
+          onmouseout="this.style.background='#FFFFFF'; this.style.color='black';">
           ➕ CARGAR MÁS
         </button>
       </div>
@@ -264,8 +255,18 @@ export default {
 
 @media (max-width: 992px) {
   .vistas {
-    grid-template-columns: 1fr;
-    padding: 1rem;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.5rem !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .contenedor {
+    width: 100%;
+  }
+  .contenedor_vistaP {
+    width: 100%;
+    padding: 0;
   }
 }
 
@@ -329,8 +330,8 @@ export default {
 
 .busqueda svg {
   background: black;
-  color: #ffff00;
-  padding: 10px;
+  color: #FFFFFF;
+  padding: 5px;
   border: 4px solid black;
 }
 
@@ -354,30 +355,31 @@ export default {
 }
 
 .campo_busqueda:focus {
-  background-color: #ffff00;
+  background-color: #FFFFFF;
   transform: translate(-3px, -3px);
   box-shadow: 9px 9px 0px black;
 }
 
 .listaPublicaciones {
   width: 100%;
-  gap: 1rem;
-  display: flex;
-  flex-direction: column;
+  gap: 1.5rem;
+  display: flex !important;
+  flex-direction: column !important;
   height: auto;
   min-height: 50vh;
   overflow-y: visible;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 @media (min-width: 992px) {
   .listaPublicaciones {
     height: 80vh;
     overflow-y: auto;
-    padding: 0 2rem;
+    padding: 0 1rem;
     scrollbar-width: thin;
-    scrollbar-color: #ffff00 black;
+    scrollbar-color: #DC143C black;
   }
 }
 
@@ -401,13 +403,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 1000;
   padding: 2rem;
   backdrop-filter: blur(5px);
 }
 
 .modal_contenido {
-  background-color: #00ffff; /* Cyan base for high impact */
+  background-color: #FFFFFF; /* Cyan base for high impact */
   padding: 2.5rem;
   border: 6px solid black;
   box-shadow: 20px 20px 0px black;
@@ -422,7 +424,7 @@ export default {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #ff00ff;
+  background: #DC143C;
   color: black;
   border: 4px solid black;
   font-size: 1.5rem;
@@ -438,7 +440,7 @@ export default {
 .boton_cerrar_modal:hover {
   transform: translate(-3px, -3px);
   box-shadow: 7px 7px 0px black;
-  background-color: #ffff00;
+  background-color: #FFFFFF;
 }
 
 /* Animaciones */

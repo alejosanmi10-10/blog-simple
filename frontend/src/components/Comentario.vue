@@ -1,15 +1,15 @@
 <template>
   <div class="contain_comentario">
-    <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" class="icono_comentario" style="border-radius: 50%; width: 3em; height: 3em; object-fit: cover; object-position: top center; border: 2px solid black; background: white;">
-      <div class="info_comentario" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
-        <div style="display: flex; align-items: baseline;">
-          <p style="font-weight: bold; margin: 0; font-family: 'League Spartan', sans-serif; font-size: 1.2rem;">{{ usuario }}</p>
-          <p style="margin-left: 10px; margin-bottom: 0; font-size: 0.8rem; opacity: 0.7;">{{ fecha }}</p>
-        </div>
-        <p v-if="programa" style="margin: 0; font-size: 0.75rem; font-weight: bold; color: #ff00ff; text-transform: uppercase;">▶ {{ programa }}</p>
-        <p style="margin: 0.5rem 0 0 0; font-family: Arial, sans-serif;">{{ comentario }}</p>
+    <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" class="icono_comentario">
+    <div class="info_comentario">
+      <div class="header_info_comentario">
+        <p class="usuario_comentario">{{ usuario }}</p>
+        <p class="fecha_comentario">{{ fecha }}</p>
       </div>
-    <svg v-if="usuario == this.nombre" xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24"
+      <p v-if="programa" class="programa_comentario">▶ {{ programa }}</p>
+      <p class="texto_comentario">{{ comentario }}</p>
+    </div>
+    <svg v-if="usuario == this.nombre" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"
       class="icono_eliminar" @click="capturar(id)">
       <path fill="currentColor"
         d="M18 19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4V4h4.5l1-1h4l1 1H19v3h-1zM6 7v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7zm12-1V5h-4l-1-1h-3L9 5H5v1zM8 9h1v10H8zm6 0h1v10h-1z" />
@@ -17,6 +17,9 @@
   </div>
 </template>
 <script>
+// LÓGICA DE COMENTARIO
+// Única meta: Verificamos si el que hizo este comentario (usuario en props) 
+// es el que está logueado en Pinia (nombre). ¡De ser iguales, se le dibuja un bote de basura para borrarlo!
 import { computed } from 'vue';
 import { useUserStore } from '../stores/userStore';
 
@@ -43,58 +46,107 @@ export default {
     }
   }
 };
-
 </script>
 <style>
-@keyframes slide-fwd-center {
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(1.01);
-  }
-}
-
 .contain_comentario {
-  width: 80%;
-  background-color: white;
-  border-radius: 4rem;
-  display: grid;
-  grid-template-columns: 10% 80% 10%;
-  padding: 1px 2rem;
-
+  width: 100%;
+  background-color: #E5E5E5;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px black;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s;
 }
 
 .contain_comentario:hover {
-  animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  background-color: rgb(224, 220, 220);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px black;
 }
 
 .icono_comentario {
-  color: orange;
-  margin-top: 10px;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  object-position: top center;
+  border: 3px solid black;
+  background: white;
+  flex-shrink: 0;
 }
 
 .info_comentario {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   color: black;
-  line-height: normal;
-  padding: 0;
+  line-height: 1.4;
+}
+
+.header_info_comentario {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.usuario_comentario {
+  font-weight: 900;
   margin: 0;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.fecha_comentario {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.programa_comentario {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #DC143C;
+  text-transform: uppercase;
+}
+
+.texto_comentario {
+  margin: 0.5rem 0 0 0;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  word-break: break-word;
 }
 
 .icono_eliminar {
-  color: #000;
-  text-align: end;
-  padding-left: 3rem;
-  padding-top: 0.5rem;
-  width: 30px;
-  transition: color 1s ease;
+  color: black;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.2rem;
 }
 
 .icono_eliminar:hover {
-  color: red;
+  color: white;
+  background-color: red;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .contain_comentario {
+    padding: 0.8rem;
+    gap: 0.5rem;
+  }
+  .icono_comentario {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .usuario_comentario {
+    font-size: 1.1rem;
+  }
 }
 </style>

@@ -9,7 +9,7 @@ export const swallTrue = (mensaje) => {
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
-    background: '#00ffff',
+    background: '#FFFFFF',
     color: 'black'
   });
 };
@@ -23,7 +23,7 @@ export const swallError = (mensaje) => {
     showConfirmButton: false,
     timer: 4000,
     timerProgressBar: true,
-    background: '#ff00ff',
+    background: '#DC143C',
     color: 'white'
   });
 };
@@ -71,17 +71,17 @@ export const swallEditForm = async (publicacion, customClass = {}) => {
   const { value: formValues } = await Swal.fire({
     title: "EDICION",
     html: `
-        <label style="color:orange;">Titulo:</label>
+        <label style="color:black; font-weight:900;">⚡ TÍTULO:</label>
         <br>
-        <textarea id="titulo" class="swal2-textarea" style="width: 90%; box-sizing: border-box;" required>${publicacion.titulo}</textarea>
+        <textarea id="titulo" class="swal2-textarea" style="width: 90%; box-sizing: border-box; border: 3px solid black; box-shadow: 4px 4px 0px black;" required>${publicacion.titulo}</textarea>
         <br>
-        <label style="color:orange;">Descripción:</label>
+        <label style="color:black; font-weight:900;">💬 HISTORIA:</label>
         <br>
-        <textarea id="texto" class="swal2-textarea" style="width: 90%; box-sizing: border-box;" required>${publicacion.texto}</textarea>
+        <textarea id="texto" class="swal2-textarea" style="width: 90%; box-sizing: border-box; border: 3px solid black; box-shadow: 4px 4px 0px black;" required>${publicacion.texto}</textarea>
         <br>
-        <label style="color:orange;">Categoría:</label>
+        <label style="color:black; font-weight:900;">🔥 SERIE:</label>
         <br>
-        <textarea id="categoria" class="swal2-textarea" style="width: 90%; box-sizing: border-box;" required>${publicacion.categoria}</textarea>
+        <textarea id="categoria" class="swal2-textarea" style="width: 90%; box-sizing: border-box; border: 3px solid black; box-shadow: 4px 4px 0px black;" required>${publicacion.categoria}</textarea>
       `,
     customClass: {
       popup: "poput",

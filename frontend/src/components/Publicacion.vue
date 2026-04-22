@@ -5,7 +5,7 @@
         <img :src="'/avatars/' + (icono || 'finn') + '.png'" alt="Avatar" style="width: 3.5rem; height: 3.5rem; border-radius: 50%; border: 3px solid black; object-fit: cover; object-position: top center; box-shadow: 4px 4px 0px black;">
         <div style="display: flex; flex-direction: column; justify-content: center;">
           <h3 style="margin: 0; font-weight: 900; font-size: 1.5rem; font-family: 'League Spartan', sans-serif;">{{ creador }}</h3>
-          <p v-if="programa" style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #ff00ff; text-transform: uppercase;">▶ {{ programa }}</p>
+          <p v-if="programa" style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #DC143C; text-transform: uppercase;">▶ {{ programa }}</p>
         </div>
       </div>
       <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
@@ -18,7 +18,7 @@
       <div class="contenedor_titulo">
         <h1 class="titulo_publicacion">{{ titulo }}</h1>
       </div>
-      <p style="text-align: center; font-weight: 900; text-transform: uppercase; background: #00ffff; border: 4px solid black; padding: 5px 15px; width: fit-content; margin: 0 auto; box-shadow: 6px 6px 0px black; font-family: 'League Spartan', sans-serif;">{{ categoria }}</p>
+      <p style="text-align: center; font-weight: 900; text-transform: uppercase; background: #FFFFFF; border: 4px solid black; padding: 5px 15px; width: fit-content; margin: 0 auto; box-shadow: 6px 6px 0px black; font-family: 'League Spartan', sans-serif;">{{ categoria }}</p>
 
       <hr style="border: none; border-bottom: 4px dashed black; width: 100%; margin: 20px 0;">
 
@@ -32,7 +32,7 @@
             {{ esFavorito ? '⭐ Favorito' : '✩ Guardar' }}
           </button>
           <div class="conteo_reacciones" @click.stop="toggleLike">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" 
+            <svg xmlns="http://www.w3.org/2000/svg" width="2.4em" height="2.4em" viewBox="0 0 24 24" 
               :style="{ color: haReaccionado ? '#ff0000' : 'black' }">
               <path fill="currentColor" d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/>
             </svg>
@@ -41,7 +41,7 @@
           <div v-if="creador === nombreUsuarioLogueado" class="ver_usuarios_btn scale-up-center" @click.stop="toggleUsuariosReacciones">
             👀 Ver Reacciones
           </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24" class="icono_comentar"
+          <svg xmlns="http://www.w3.org/2000/svg" width="2.4em" height="2.4em" viewBox="0 0 24 24" class="icono_comentar"
             @click.stop="agregarMensaje">
             <path fill="currentColor"
               d="M6 14h12v-2H6zm0-3h12V9H6zm0-3h12V6H6zM4 18q-.825 0-1.412-.587T2 16V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v18l-4-4z" />
@@ -288,7 +288,7 @@ export default {
 }
 
 .titulo_publicacion {
-  background-color: #ffff00;
+  background-color: #FFFFFF;
   padding: 1rem 2rem;
   color: black;
   border: 4px solid black;
@@ -301,7 +301,7 @@ export default {
 
 .icono_comentar {
   color: black;
-  background-color: #ff00ff;
+  background-color: #DC143C;
   border: 3px solid black;
   box-shadow: 4px 4px 0px black;
   padding: 0.5rem;
@@ -310,7 +310,7 @@ export default {
 }
 
 .icono_comentar:hover {
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px black;
 }
@@ -322,13 +322,13 @@ export default {
   background-color: white;
   border: 3px solid black;
   box-shadow: 4px 4px 0px black;
-  padding: 0.3rem 0.8rem;
+  padding: 0.2rem 0.6rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .conteo_reacciones:hover {
-  background-color: #ff00ff;
+  background-color: #DC143C;
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px black;
 }
@@ -340,7 +340,7 @@ export default {
 }
 
 .ver_usuarios_btn {
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   border: 3px solid black;
   box-shadow: 4px 4px 0px black;
   padding: 0.3rem 0.8rem;
@@ -353,7 +353,7 @@ export default {
 }
 
 .ver_usuarios_btn:hover {
-  background-color: #ff00ff;
+  background-color: #DC143C;
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px black;
   color: white;
@@ -395,5 +395,26 @@ export default {
   gap: 15px;
   padding-top: 20px;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .contenedor_publicacion {
+    padding: 1rem;
+  }
+  .titulo_publicacion {
+    font-size: 1.3rem;
+    padding: 0.8rem 1rem;
+    word-break: break-word;
+    text-align: center;
+  }
+  .contenedor_publicacion > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+  .conteo_reacciones, .ver_usuarios_btn {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+  }
 }
 </style>

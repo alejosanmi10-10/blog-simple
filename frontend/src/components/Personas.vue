@@ -17,7 +17,7 @@
         <p>{{ ubicacion }}</p>
       </div>
 
-      <div v-if="programa" style="display: flex; gap: 1rem; margin-top: 0.3rem; color: #ff00ff;">
+      <div v-if="programa" style="display: flex; gap: 1rem; margin-top: 0.3rem; color: #DC143C;">
         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
           <path fill="currentColor"
             d="M21 6h-7.59l2.3-2.29c.39-.39.39-1.02 0-1.41a.996.996 0 0 0-1.41 0L12 4.59L9.71 2.3a.996.996 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 14H3V8h18zM9 10v8l7-4z" />
@@ -58,7 +58,7 @@ export default {
   display: grid;
   grid-template-columns: 25% 75%;
   padding: 0.8rem 1.2rem;
-  background-color: #ffff00; /* Yellow */
+  background-color: #FFFFFF;
   color: black;
   border: 4px solid black;
   box-shadow: 6px 6px 0px black;
@@ -71,7 +71,7 @@ export default {
 .contenedor_persona:hover {
   transform: translate(-3px, -3px);
   box-shadow: 9px 9px 0px black;
-  background-color: #00ffff;
+  background-color: #E5E5E5;
 }
 
 .info_personas {

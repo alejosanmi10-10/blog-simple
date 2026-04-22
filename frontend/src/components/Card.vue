@@ -68,7 +68,7 @@ export default {
 }
 
 .des {
-    background-color: #ffff00;
+    background-color: #FFFFFF;
     color: black;
     border: 3px solid black;
     box-shadow: 4px 4px 0px black;
@@ -86,7 +86,7 @@ export default {
 
 .botones {
     color: black;
-    background-color: #ff00ff;
+    background-color: #DC143C;
     border: 3px solid black;
     box-shadow: 4px 4px 0px black;
     padding: 5px;
@@ -97,7 +97,7 @@ export default {
 }
 
 .botones:hover {
-    background-color: #00ffff;
+    background-color: #FFFFFF;
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0px black;
 }

@@ -18,7 +18,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ff00ff; /* Magenta vibrante */
+  background-color: #DC143C; /* Magenta vibrante */
   font-family: 'League Spartan', sans-serif;
   padding: 2rem;
 }
@@ -38,7 +38,7 @@
   margin: 0;
   line-height: 1;
   -webkit-text-stroke: 4px black;
-  color: #ffff00; /* Amarillo */
+  color: #FFFFFF; /* Amarillo */
 }
 
 .error-message {
@@ -56,7 +56,7 @@
 
 .boton-home {
   display: inline-block;
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   color: black;
   border: 4px solid black;
   padding: 1rem 2rem;
@@ -69,7 +69,7 @@
 .boton-home:hover {
   transform: translate(-4px, -4px);
   box-shadow: 12px 12px 0px black;
-  background-color: #ffff00;
+  background-color: #FFFFFF;
 }
 
 @media (max-width: 768px) {

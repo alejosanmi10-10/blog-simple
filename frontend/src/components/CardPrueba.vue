@@ -35,15 +35,15 @@ export default {
 }
 
 .contenedor_prueba:nth-child(even) {
-  background-color: #ff00ff; /* Magenta */
+  background-color: #DC143C; /* Magenta */
   color: black;
 }
 .contenedor_prueba:nth-child(odd) {
-  background-color: #00ffff; /* Cyan */
+  background-color: #FFFFFF; /* Cyan */
   color: black;
 }
 .contenedor_prueba:nth-child(3n) {
-  background-color: #ffff00; /* Yellow */
+  background-color: #FFFFFF; /* Yellow */
   color: black;
 }
 

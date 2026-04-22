@@ -1,8 +1,8 @@
 <template>
   <div class="contenedor_crear">
     <div class="decoracion scale-up-center">
-      <h1>¡Crea tu propia<br>historia mágica!</h1>
-      <h3>Comparte sobre tu personaje favorito</h3>
+      <h1>¡COMPARTE TU<br>MUNDO CARTOON!</h1>
+      <h3>Sube historias, teorías o datos curiosos de tus series favoritas</h3>
     </div>
 
     <form class="info_crear scale-up-center" @submit.prevent="crearPublicacion">
@@ -11,63 +11,26 @@
       </div>
       
       <div class="input_group">
-        <label class="label_Crear">Titulo:</label>
+        <label class="label_Crear">TITULO DE LA PUBLICACIÓN:</label>
         <input type="text" class="input_crear" v-model="nuevaPublicacion.titulo" placeholder="Ej. El secreto de la Dulce Princesa" required />
       </div>
 
-      <div class="input_group">
-        <label class="label_Crear">Serie:</label>
-        <select class="input_crear" v-model="nuevaPublicacion.categoria" required style="cursor: pointer; appearance: auto;">
-          <option value="" disabled selected>Selecciona una serie</option>
-          <option value="Hora de Aventura">Hora de Aventura</option>
-          <option value="Un Show Más">Un Show Más</option>
-          <option value="El Increíble Mundo de Gumball">El Increíble Mundo de Gumball</option>
-          <option value="Ben 10">Ben 10</option>
-          <option value="Ben 10: Fuerza Alienígena / Supremacía">Ben 10: Fuerza Alienígena / Supremacía</option>
-          <option value="Las Chicas Superpoderosas">Las Chicas Superpoderosas</option>
-          <option value="Coraje, el Perro Cobarde">Coraje, el Perro Cobarde</option>
-          <option value="Steven Universe">Steven Universe</option>
-          <option value="Escandalosos">Escandalosos</option>
-          <option value="Los Jóvenes Titanes">Los Jóvenes Titanes</option>
-          <option value="Los Jóvenes Titanes en Acción">Los Jóvenes Titanes en Acción</option>
-          <option value="KND: Los Chicos del Barrio">KND: Los Chicos del Barrio</option>
-          <option value="Ed, Edd y Eddy">Ed, Edd y Eddy</option>
-          <option value="El Laboratorio de Dexter">El Laboratorio de Dexter</option>
-          <option value="Johnny Bravo">Johnny Bravo</option>
-          <option value="Samurai Jack">Samurai Jack</option>
-          <option value="Mansión Foster para Amigos Imaginarios">Mansión Foster para Amigos Imaginarios</option>
-          <option value="Las Sombrías Aventuras de Billy y Mandy">Las Sombrías Aventuras de Billy y Mandy</option>
-          <option value="Chowder">Chowder</option>
-          <option value="Las Maravillosas Desventuras de Flapjack">Las Maravillosas Desventuras de Flapjack</option>
-          <option value="El Campamento de Lazlo">El Campamento de Lazlo</option>
-          <option value="Clarence">Clarence</option>
-          <option value="Más Allá del Jardín">Más Allá del Jardín (Over the Garden Wall)</option>
-          <option value="El Tren Infinito">El Tren Infinito (Infinity Train)</option>
-          <option value="OK K.O.! Seamos Héroes">OK K.O.! Seamos Héroes</option>
-          <option value="Tío Grandpa">Tío Grandpa</option>
-          <option value="Generador Rex">Generador Rex</option>
-          <option value="Titán Simbiónico">Titán Simbiónico</option>
-          <option value="La Vaca y el Pollito">La Vaca y el Pollito</option>
-          <option value="Soy la Comadreja">Soy la Comadreja</option>
-          <option value="Mucha Lucha">Mucha Lucha</option>
-          <option value="Isla del Drama (Drama Total)">Isla del Drama (Drama Total)</option>
-          <option value="Otra">Otra / No está en la lista</option>
-        </select>
+      <div class="input_group" style="position: relative;" ref="dropdownRef">
+        <label class="label_Crear">SELECCIONA LA SERIE:</label>
+        <input type="text" class="input_crear" v-model="busquedaSerie" placeholder="Empieza a escribir..." @focus="mostrarOpciones = true" @input="mostrarOpciones = true" required />
+        <ul v-if="mostrarOpciones && seriesFiltradas.length > 0" class="lista_opciones">
+          <li v-for="serie in seriesFiltradas" :key="serie" @click="seleccionarSerie(serie)">{{ serie }}</li>
+        </ul>
       </div>
 
       <div class="input_group scale-up-center" v-if="nuevaPublicacion.categoria === 'Otra'">
-        <label class="label_Crear">¿Cuál serie es?</label>
-        <input type="text" class="input_crear" v-model="seriePersonalizada" placeholder="Escribe el nombre de la serie (Ej. Kipo, Más Allá del Jardín...)" required />
+        <label class="label_Crear">¿QUÉ SERIE ES?</label>
+        <input type="text" class="input_crear" v-model="seriePersonalizada" placeholder="Escribe el nombre de la serie" required />
       </div>
 
       <div class="input_group">
-        <label class="label_Crear">Texto:</label>
+        <label class="label_Crear">¿QUÉ NOS VAS A CONTAR HOY?:</label>
         <textarea class="textarea" v-model="nuevaPublicacion.texto" placeholder="Escribe aquí tu historia..." required></textarea>
-      </div>
-
-      <div class="input_group">
-        <label class="label_Crear">Enlace de Imagen (Opcional):</label>
-        <input type="url" class="input_crear" v-model="nuevaPublicacion.imagen_url" placeholder="Ej. https://.../imagen.png" />
       </div>
 
       <button type="submit" class="boton">Guardar</button>
@@ -75,17 +38,84 @@
   </div>
 </template>
 <script setup>
-
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { crearPost } from '../../functions/api';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/userStore';
 
 const router = useRouter();
 const userStore = useUserStore();
-
-// Uso PRO de Pinia: Obtenemos el usuario del store global
 const usuarioId = computed(() => userStore.user?.id);
+
+const busquedaSerie = ref('');
+const mostrarOpciones = ref(false);
+const dropdownRef = ref(null);
+const seriePersonalizada = ref('');
+
+const categorias = [
+    '2 Perros Tontos', 'A Pup Named Scooby-Doo', 'Adventure Time', 'Agallas en la Gran Ciudad', 
+    'Animales en Calzones', 'Animaniacs (90s)', 'Animaniacs (2020)', 'Archie y sus misterios', 
+    'Baby Looney Tunes', 'Bakugan', 'Batman la Serie Animada', 'Batman: El Valiente', 
+    'Beetlejuice', 'Ben 10 (Original)', 'Ben 10: Fuerza Alienígena', 'Ben 10: Supremacía Alienígena', 
+    'Ben 10: Omniverse', 'Ben 10 (Reboot)', 'Beware the Batman', 'Beyblade', 'Birdman', 
+    'Bleach (CN)', 'Bunnicula', 'Butch Cassidy', 'Campamento de verano', 'Camp Lazlo', 
+    'Capitán Planeta', 'Capitol Critters', 'Carne con Malo', 'Carrera Alucinante', 
+    'Casper la Escuela del Susto', 'CatDog (CN)', 'Chicas Superpoderosas Z', 'Chowder', 
+    'Clarence', 'Class of 3000', 'Coraje el Perro Cobarde', 'Crónicas de Xiaolin', 
+    'Cuentos de la Cripta', 'DC Super Hero Girls', 'Death Note (CN)', 'Defensores de la Tierra', 
+    'Deltora Quest', 'Dexter (96)', 'Dino Boy', 'Don Gato y su Pandilla', 'Dorothy y el Mago de Oz', 
+    'Dragon Ball Z', 'Dragon Ball GT', 'Dragon Ball Super', 'Duck Dodgers', 'Duelo Xiaolin', 
+    'Ed, Edd y Eddy', 'El Campamento de Lazlo', 'El Espectacular Hombre Araña', 'El Fantasma del Espacio', 
+    'El Increíble Mundo de Gumball', 'El Laboratorio de Dexter', 'El Largo y Tortuoso Camino a Casa', 
+    'El Mundo de Craig', 'El Proyecto Zeta', 'El show de los Looney Tunes', 'El show de Tom y Jerry', 
+    'El Tren Infinito', 'Eliot Kid', 'Escandalositos', 'Escandalosos', 'Fenomenoide', 
+    'Fish Police', 'Foster (2004)', 'G.I. Joe Sigma 6', 'Generador Rex', 'George de la Selva', 
+    'Gormiti', 'Grojband', 'Hamtaro', 'Hi Hi Puffy AmiYumi', 'Hombres de Negro: La Serie', 
+    'Hong Kong Phoey', 'Hora de Aventura', 'Hot Wheels: Battle Force 5', 'Huckleberry Hound', 
+    'Inazuma Eleven', 'Inspector Gadget', 'Inuyasha', 'Isla del Drama', 'Jabberjaw', 
+    'Johnny Bravo', 'Johnny Test', 'Jonny Quest', 'Juniper Lee', 'Justice League', 
+    'Kaijudo', 'KND: Los Chicos del Barrio', 'Krypto el superperro', 'La CQ', 
+    'La Mansión Foster para Amigos Imaginarios', 'La Nueva Escuela del Emperador', 'La Pantera Rosa', 
+    'La Vaca y el Pollito', 'La vida moderna de Rocko', 'Las Aventuras de Batman y Robin', 
+    'Las Chicas Superpoderosas (Original)', 'Las Chicas Superpoderosas (Reboot)', 
+    'Las Sombrías Aventuras de Billy y Mandy', 'Lego Friends', 'Lego Nexo Knights', 'Lego Star Wars', 
+    'Liga de la Justicia Ilimitada', 'Looney Tunes Cartoons', 'Loopeados', 'Los 13 Fantasmas de Scooby-Doo', 
+    'Los Autos Locos (Serie Original)', 'Los Autos Locos (2017)', 'Los Castores Cascarrabias', 
+    'Los Herculoides', 'Los Jóvenes Titanes (Original)', 'Los Jóvenes Titanes en Acción', 
+    'Los Picapiedra', 'Los Sábados Secretos', 'Los Supersónicos', 'Magiespadas', 'Magilla Gorilla', 
+    'Mao Mao: Héroes de Puro Corazón', 'Manzana y Cebollín', 'Más Allá del Jardín', 'Max Steel', 
+    'Megas XLR', 'Mi Compañero de Clase es un Mono', 'Mixels', 'Mucha Lucha', 'Naruto', 
+    'Naruto Shippuden', 'Ninjago', 'Niño Ardilla', 'OK K.O.! Seamos Héroes', 'One Piece', 
+    'Ositos Cariñositos', 'Otra', 'Pac-Man', 'Películas de Cartoon Network', 'Penelope Pitstop', 
+    'Pinky y Cerebro', 'Pokémon', 'Power Rangers (CN)', 'Primal', 'Ranma 1/2', 'Regular Show', 
+    'Ren y Stimpy', 'Rick and Morty', 'Robotboy', 'Rugrats', 'Sabrina la brujita', 'Samurai Jack', 
+    'Scooby-Doo', 'Sealab 2020', 'Smiling Friends', 'Sonic Boom', 'Soy la Comadreja', 'Space Ghost', 
+    'Speed Buggy', 'Star Wars: La Guerra de los Clones', 'Steven Universe', 'Steven Universe Future', 
+    'Storm Hawks', 'Supernoobs', 'Superman la Serie Animada', 'SWAT Kats', 'Sym-Bionic Titan', 
+    'Teen Titans', 'The Batman', 'ThunderCats', 'Tío Grandpa', 'Tiny Toons', 'Titán Simbiónico', 
+    'Tom y Jerry', 'Transformers', 'Un Show Más', 'Unikitty!', 'Vaca y Pollito', 'Victor y Valentino', 
+    'Villanos', 'Xiaolin Showdown', 'Yogi Bear', 'Young Justice', 'Zatch Bell'
+].sort();
+
+const seriesFiltradas = computed(() => {
+  if (!busquedaSerie.value) return categorias;
+  return categorias.filter(s => s.toLowerCase().includes(busquedaSerie.value.toLowerCase()));
+});
+
+const seleccionarSerie = (serie) => {
+  busquedaSerie.value = serie;
+  nuevaPublicacion.value.categoria = serie;
+  mostrarOpciones.value = false;
+};
+
+const closeDropdown = (e) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
+    mostrarOpciones.value = false;
+  }
+};
+
+onMounted(() => document.addEventListener('click', closeDropdown));
+onUnmounted(() => document.removeEventListener('click', closeDropdown));
 
 const nuevaPublicacion = ref({
   id_usuario: usuarioId.value,
@@ -94,8 +124,6 @@ const nuevaPublicacion = ref({
   texto: '',
   imagen_url: ''
 });
-const seriePersonalizada = ref('');
-console.log(nuevaPublicacion);
 
 const crearPublicacion = async () => {
   try {
@@ -108,28 +136,17 @@ const crearPublicacion = async () => {
       titulo: nuevaPublicacion.value.titulo,
       categoria: categoriaFinal,
       texto: nuevaPublicacion.value.texto,
-      imagen_url: nuevaPublicacion.value.imagen_url
+      imagen_url: ''
     };
 
-    console.log('Datos del usuario en formato JSON:', publicationData);
-
     const response = await crearPost(publicationData);
-
     if (response && response.status === 201) {
-      console.log(response.data.message);
-
-    } else {
-      //   console.log("error en creacion");
+      router.push('/dashboard/perfil');
     }
-
   } catch (error) {
     console.error("Error al crear la publicacion:", error);
-  } finally {
-    router.push('/dashboard/perfil')
   }
 };
-
-
 </script>
 <style scoped>
 .contenedor_crear {
@@ -146,6 +163,11 @@ const crearPublicacion = async () => {
   text-align: center;
   color: white;
   text-shadow: 4px 4px 0px black;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px black;
+  backdrop-filter: blur(4px);
 }
 
 .decoracion h1 {
@@ -154,7 +176,7 @@ const crearPublicacion = async () => {
   margin-bottom: 0.5rem;
   font-family: 'League Spartan', sans-serif;
   text-transform: uppercase;
-  color: #ffff00;
+  color: #FFFFFF;
   -webkit-text-stroke: 2px black;
   line-height: 1.1;
 }
@@ -165,7 +187,7 @@ const crearPublicacion = async () => {
   margin-top: 0;
   font-family: 'League Spartan', sans-serif;
   text-transform: uppercase;
-  color: #00ffff;
+  color: #FFFFFF;
   -webkit-text-stroke: 1.5px black;
 }
 
@@ -175,7 +197,7 @@ const crearPublicacion = async () => {
   flex-direction: column;
   gap: 1.5rem;
   padding: 2.5rem;
-  background-color: #00ffff;
+  background-color: #FFFFFF;
   border: 4px solid black;
   box-shadow: 12px 12px 0px black;
   color: black;
@@ -195,7 +217,7 @@ const crearPublicacion = async () => {
   text-transform: uppercase;
   font-family: 'League Spartan', sans-serif;
   font-weight: 900;
-  background: #ffff00;
+  background: #FFFFFF;
   padding: 10px 20px;
   border: 4px solid black;
   box-shadow: 6px 6px 0px black;
@@ -250,7 +272,7 @@ const crearPublicacion = async () => {
   font-family: 'League Spartan', sans-serif;
   border: 4px solid black;
   font-size: 1.5rem;
-  background-color: #ff00ff;
+  background-color: #DC143C;
   width: fit-content;
   margin: 1rem auto 0;
   border-radius: 0;
@@ -261,7 +283,7 @@ const crearPublicacion = async () => {
 }
 
 .boton:hover {
-  background-color: #ff4dff;
+  background-color: #E5E5E5;
   transform: translate(-4px, -4px);
   box-shadow: 10px 10px 0px black;
   color: white;
@@ -273,5 +295,51 @@ const crearPublicacion = async () => {
 }
 .scale-up-center {
   animation: scale-up-center 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@media (max-width: 768px) {
+  .contenedor_crear {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+  }
+  .info_crear {
+    width: 100%;
+    padding: 1.5rem;
+  }
+  .decoracion h1 {
+    font-size: 3rem;
+  }
+  .boton {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+.lista_opciones {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px black;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  z-index: 1000;
+}
+.lista_opciones li {
+  padding: 10px;
+  border-bottom: 2px solid black;
+  cursor: pointer;
+  font-family: 'League Spartan', sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.lista_opciones li:hover {
+  background: #FFFFFF;
 }
 </style>
