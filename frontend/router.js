@@ -3,7 +3,7 @@ import Login from './src/pages/inicio/InicialPage.vue';
 import Registro from './src/pages/inicio/RegistroPage.vue';
 import Inicio from './src/pages/inicio/LoginPage.vue';
 
-import Dashboard from './src/pages/principal/DashboardPage.vue';
+import MainLayout from './src/layouts/MainLayout.vue';
 import Principal from './src/pages/principal/PrincipalPage.vue';
 import Perfil from './src/pages/principal/PerfilPage.vue'
 import Crear from './src/pages/principal/CrearPage.vue'
@@ -17,7 +17,7 @@ const routes = [
   { path: '/registro', component: Registro} ,
   { path: '/inicio', component: Inicio} ,
 
-  { path: '/dashboard', component: Dashboard ,
+  { path: '/dashboard', component: MainLayout ,
     children:[
       { path: 'principal', component:Principal},
       { path: 'perfil', component:Perfil },
@@ -33,7 +33,6 @@ const router = createRouter({
   routes,
 });
 
-// NAVIGATION GUARDS (Requisito CORE)
 router.beforeEach((to, from, next) => {
   const publicPages = ['/', '/registro', '/inicio'];
   const authRequired = !publicPages.includes(to.path);
