@@ -3,7 +3,7 @@ import Login from '../views/inicio/InicialPage.vue';
 import Registro from '../views/inicio/RegistroPage.vue';
 import Inicio from '../views/inicio/LoginPage.vue';
 
-import MainLayout from '../layouts/DashboardLayout.vue';
+import MainLayout from '../layouts/dashboard/DashboardLayout.vue';
 import Principal from '../views/dashboard/PrincipalPage.vue';
 import Perfil from '../views/dashboard/PerfilPage.vue'
 import Crear from '../views/dashboard/CrearPage.vue'
